@@ -43,7 +43,7 @@
     }
 }
 
-@media (max-width: 575px) {
+@media (max-width: 767px) {
     .imagen{
         display: none;
     }
