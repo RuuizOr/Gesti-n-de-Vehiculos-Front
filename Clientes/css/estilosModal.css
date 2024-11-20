@@ -1,0 +1,231 @@
+/* Colores:
+    AZUL: #092e95
+    NEGRO: #000
+    VARIANTE DE AZUL: #2052dd
+*/
+
+/* Formularios flotantes */
+.modal-content {
+    border: none !important;
+    border-radius: 1rem !important;
+    color: white !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .5) !important;
+    overflow: hidden !important;
+    background: linear-gradient(135deg, #2052dd, #092e95) !important;
+    animation: fadeIn 0.5s !important;
+    text-align: center !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10%); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-bottom: none !important;
+    color: white !important;
+    padding: 1.5rem !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+}
+
+.modal-title {
+    margin: 0 !important;
+    font-weight: 900 !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.close {
+    position: absolute !important;
+    right: 1rem !important;
+    top: 1rem !important;
+    font-size: 1.5rem !important;
+    color: #fff !important;
+    opacity: 0.8 !important;
+    transition: opacity .3s !important;
+}
+
+.close:hover {
+    opacity: 1 !important;
+    color: #ff5500 !important;
+}
+
+.modal-body {
+    padding: 2rem !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    text-align: center !important;
+}
+
+.modal-body .form-group {
+    margin-bottom: 2rem !important;
+    position: relative !important;
+}
+
+.modal-body .form-group .col-form-label {
+    position: absolute !important;
+    left: 1rem !important;
+    top: 0.1rem !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #6c757d !important;
+    transition: transform 0.3s, color 0.3s !important;
+    pointer-events: none !important;
+    transform-origin: top left !important;
+}
+
+.modal-body .form-control {
+    width: 100% !important;
+    font-size: 1rem !important;
+    color: #495057 !important;
+    border: 1px solid #ced4da !important;
+    border-radius: .5rem !important;
+    transition: all .3s ease-in-out !important;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .1) !important;
+}
+
+.modal-body .form-control:focus {
+    color: #495057 !important;
+    background-color: #fff !important;
+    border-color: #007bff !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 .05rem #007bff !important;
+}
+
+.modal-body .form-control:focus + .col-form-label,
+.modal-body .form-control:not(:placeholder-shown) + .col-form-label {
+    transform: translateY(-2rem) scale(0.8) !important;
+    color: #fff !important;
+}
+
+.modal-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: .1rem .1rem !important;
+    border-top: none !important;
+    background-color: transparent !important;
+}
+
+.modal-footer .btn {
+    padding: .5rem 2rem !important;
+    font-size: 1rem !important;
+    border-radius: .5rem !important;
+    transition: all .3s !important;
+}
+
+.modal-footer .btn-primary {
+    background-color: #ff5500 !important;
+    color: white !important;
+    border: none !important;
+}
+
+.modal-footer .btn-primary:hover {
+    background-color: #c8571f !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .2) !important;
+}
+
+.modal-dialog {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 100vh !important;
+    margin: 0 auto !important;
+}
+
+/* Estilos personalizados adicionales */
+.custom-modal-dialog {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 80vh !important;
+    text-align: center !important;
+}
+
+.custom-modal-content {
+    border: none !important;
+    border-radius: 1rem !important;
+    color: white !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .5) !important;
+    overflow: hidden !important;
+    background: linear-gradient(135deg, #2052dd, #092e95) !important;
+    animation: fadeIn 0.5s !important;
+    text-align: center !important;
+}
+
+.custom-modal-header {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-bottom: none !important;
+    color: white !important;
+    padding: 1.5rem !important;
+    text-align: center !important;
+    position: relative !important;
+}
+
+.custom-modal-title {
+    margin: 0 !important;
+    font-weight: 900 !important;
+    width: 100% !important;
+    text-align: center !important;
+}
+
+.custom-modal-body {
+    padding: 2rem !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.custom-modal-body .custom-form-group {
+    margin-bottom: 2rem !important;
+    position: relative !important;
+}
+
+.custom-modal-body .custom-form-group .custom-col-form-label {
+    position: absolute !important;
+    left: 1rem !important;
+    top: 0.1rem !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: #6c757d !important;
+    transition: transform 0.3s, color 0.3s !important;
+    pointer-events: none !important;
+    transform-origin: top left !important;
+}
+
+.custom-modal-body .custom-form-control {
+    width: 100% !important;
+    font-size: 1rem !important;
+    color: #495057 !important;
+    border: 1px solid #ced4da !important;
+    border-radius: .5rem !important;
+    transition: all .3s ease-in-out !important;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .1) !important;
+}
+
+.custom-modal-body .custom-form-control:focus {
+    color: #495057 !important;
+    background-color: #fff !important;
+    border-color: #007bff !important;
+    outline: 0 !important;
+    box-shadow: 0 0 0 .05rem #007bff !important;
+}
+
+.custom-modal-body .custom-form-control:focus + .custom-col-form-label,
+.custom-modal-body .custom-form-control:not(:placeholder-shown) + .custom-col-form-label {
+    transform: translateY(-2rem) scale(0.8) !important;
+    color: #fff !important;
+}
+
+.custom-modal-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: .1rem .1rem !important;
+    border-top: none !important;
+    background-color: transparent !important;
+    margin-top: 1rem !important;
+}
