@@ -1,0 +1,44 @@
+.usuarios{
+    color: #092e95;
+    a{
+        background-color: #092e95;
+        color: #fff;
+        border: none;
+    }
+}
+
+.clientes{
+    color: #198754;
+    a{
+        background-color: #198754;
+        color: #fff;
+        border: none;
+    }
+}
+
+.vehiculos{
+    color: #dc3545;
+    a{
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+    }
+}
+
+.tipos{
+    color: #ffc107;
+    a{
+        background-color: #ffc107;
+        color: #fff;
+        border: none;
+    }
+}
+
+.imagen{
+    overflow: hidden;
+    height: 65vh;
+    img{
+        width: 100%;
+        height: 100%;
+    }
+}
