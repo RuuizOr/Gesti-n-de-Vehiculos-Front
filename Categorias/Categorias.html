@@ -72,7 +72,7 @@
                 </div>
 
                 <!-- Tabla de datos del servicio -->
-                <div class="container-xxl tabla">
+                <div class="container-xxl tabla mt-5">
                     <table class="table" id="example">
                         <thead class="thead-light">
                             <tr align="center">
@@ -83,55 +83,16 @@
                             </tr>
                         </thead>
                         <tbody id="aspirantesTableBody">
-                            <tr style="height: 20px; font-size: 15px">
-                                <td>Nombre </td>
-                                <td>Descripción </td>
-                                <td>
-                                    <div class="activo" data-estado="1" data-toggle="modal" style="align-items: center;" data-target="#modificarEstadoServicio" data-whatever="ModificarEstadoServicio"></div>
-                                </td>
-                                <td>
-                                    <button class="btn btnIcono btn-modificar" data-toggle="modal" style="height: 25px; font-size: 15px; margin: 5px; width: 25px" data-target="#modificarServicio">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            <!-- Aquí se llenarán dinámicamente las filas -->
                         </tbody>
                     </table>
                 </div>
+                
             </div>
         </div>
     </div>
 
-    <!-- Modal de registro servicio nuevo -->
-    <div class="modal fade" id="registrarServicio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Registrar Servicio</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="registrarServicio" method="post">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="50" placeholder="" required>
-                            <label for="nombre" class="col-form-label">Nombre:</label>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="apellido" name="apellido" maxlength="50" placeholder="" required>
-                            <label for="apellido" class="col-form-label">Descripción:</label>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Registrar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modificar datos del servicio -->
+    <!-- Modal para modificar el servicio -->
     <div class="modal fade" id="modificarServicio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -142,14 +103,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="modificarServicio" method="post">
+                    <form id="formModificarServicio" action="javascript:void(0);">
+                        <input type="hidden" id="idMod" name="idMod"> <!-- Campo oculto para el ID -->
                         <div class="form-group">
-                            <input type="text" class="form-control" id="nombreMod" name="nombre" maxlength="50" placeholder=" " required>
+                            <input type="text" class="form-control" id="nombreMod" name="nombreMod" maxlength="50" placeholder=" " required>
                             <label for="nombreMod" class="col-form-label">Nombre:</label>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="apellidoMod" name="apellido" maxlength="50" placeholder=" " required>
-                            <label for="apellidoMod" class="col-form-label">Descripción:</label>
+                            <input type="text" class="form-control" id="descripcionMod" name="descripcionMod" maxlength="50" placeholder=" " required>
+                            <label for="descripcionMod" class="col-form-label">Descripción:</label>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Actualizar</button>
@@ -159,12 +121,43 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+
+
+    <!-- Modificar datos del servicio -->
+    <div class="modal fade" id="modificarServicio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Categoría</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formModificarServicio">
+                        <input type="hidden" id="idMod" name="idMod"> <!-- Campo oculto para el ID -->
+                        <div class="form-group">
+                            <label for="nombreMod">Nombre:</label>
+                            <input type="text" class="form-control" id="nombreMod" name="nombreMod" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="descripcionMod">Descripción:</label>
+                            <input type="text" class="form-control" id="descripcionMod" name="descripcionMod" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
 
 <!-- Modal modificar estado del servicio -->
-<div class="modal fade" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel"
+<!-- <div class="modal fade" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel"
      aria-hidden="true">
     <div class="modal-dialog custom-modal-dialog" role="document">
         <div class="modal-content custom-modal-content">
@@ -195,16 +188,53 @@
             </div>
         </div>
     </div>
+</div> -->
+
+<div class="modal fade" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog custom-modal-dialog" role="document">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-header custom-modal-header">
+                <h5 class="modal-title custom-modal-title">Actualizar Estado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body custom-modal-body">
+                <form id="formModificarEstado">
+                    <input id="idDocente2" name="idDocente2"> <!-- Campo oculto -->
+                    <input id="estadoDocente" name="estadoDocente"> <!-- Campo oculto -->
+                    <h6>¿Estás seguro de actualizar el estado?</h6>
+                    <div class="modal-footer custom-modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
+</body>
+</html>
+
+
+
 
 <!-- Scripts utilizados -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="../js/script.js"></script>
+<script src="js/script.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-</body>
-</html>
+<script src="js/registrar.js"></script>
+<script src="js/verTodos.js"></script>
+<script src="js/actualizar.js"></script>
+<script src="js/cambioEstado.js"></script>
+
+
 
