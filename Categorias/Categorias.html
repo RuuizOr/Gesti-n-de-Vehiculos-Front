@@ -7,7 +7,7 @@
     <title>Categorias de Servicios</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="shortcut icon" type="image/x-icon" href="../img_svg/faviconDocente.svg">
+    <link rel="shortcut icon" type="image/x-icon" href="../Categorias/img/categorias.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/estilosModal.css">
     <link rel="stylesheet" href="css/estilosTabla.css">
@@ -32,28 +32,28 @@
                         <span>Inicio</span>
                     </a>
                 </li>
-                <li class="sidebar-item" title="Inicio">
+                <li class="sidebar-item" title="Usuarios">
                     <a href="../Usuarios/Usuarios.html" class="sidebar-link">
                         <i class="fa-solid fa-user"></i>
                         <span>Usuarios</span>
                     </a>
                 </li>
-                <li class="sidebar-item" title="Inicio">
-                    <a href="../Clientes/Clientes.html" class="sidebar-link">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Clientes</span>
+                <li class="sidebar-item" title="Categorías">
+                    <a href="../Categorias/Categorias.html" class="sidebar-link">
+                        <i class="fa-solid fa-tag"></i>
+                        <span>Categorías</span>
                     </a>
                 </li>
-                <li class="sidebar-item" title="Inicio">
+                <li class="sidebar-item" title="Servicios">
+                    <a href="../Servicios/Servicios.html" class="sidebar-link">
+                        <i class="fa-solid fa-toolbox"></i>
+                        <span>Servicios</span>
+                    </a>
+                </li>
+                <li class="sidebar-item" title="Vehículos">
                     <a href="../Vehiculos/Vehiculos.html" class="sidebar-link">
                         <i class="fa-solid fa-car"></i>
-                        <span>Vehiculos</span>
-                    </a>
-                </li>
-                <li class="sidebar-item" title="Inicio">
-                    <a href="" class="sidebar-link">
-                        <i class="fa-solid fa-tag"></i>
-                        <span>Categorias</span>
+                        <span>Vehículos</span>
                     </a>
                 </li>
             </ul>
@@ -84,7 +84,7 @@
                     </div>
                     <div class="col-md-3">
                         <button type="button" class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarServicio" style="display: flex; justify-content: space-evenly; align-items: center">
-                            Registrar servicio <i class="fa-solid fa-chalkboard-user"></i>
+                            Registrar categoría <i class="fa-solid fa-chalkboard-user"></i>
                         </button>
                     </div>
                 </div>
@@ -110,12 +110,42 @@
         </div>
     </div>
 
+    <!-- Modal para registrar el servicio -->
+    <div class="modal fade" id="registrarServicio" tabindex="-1" role="dialog" aria-labelledby="registrarServicioLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registrarServicioLabel">Registrar Categoría de Servicio</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formRegistrarServicio" action="javascript:void(0);">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="50" placeholder=" " required>
+                            <label for="nombre" class="col-form-label">Nombre:</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="descripcion" name="descripcion" maxlength="50" placeholder=" " required>
+                            <label for="descripcion" class="col-form-label">Descripción:</label>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Modal para modificar el servicio -->
     <div class="modal fade" id="modificarServicio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Editar Servicio</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Editar Categoría de Servicio</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -139,39 +169,6 @@
             </div>
         </div>
     </div>
-
-
-    <!-- Modificar datos del servicio -->
-    <div class="modal fade" id="modificarServicio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Editar Categoría</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="formModificarServicio">
-                        <input type="hidden" id="idMod" name="idMod"> <!-- Campo oculto para el ID -->
-                        <div class="form-group">
-                            <label for="nombreMod">Nombre:</label>
-                            <input type="text" class="form-control" id="nombreMod" name="nombreMod" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="descripcionMod">Descripción:</label>
-                            <input type="text" class="form-control" id="descripcionMod" name="descripcionMod" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    
 
 
 <!-- Modal modificar estado del servicio -->
@@ -232,8 +229,6 @@
         </div>
     </div>
 </div>
-
-
 
 </body>
 </html>
