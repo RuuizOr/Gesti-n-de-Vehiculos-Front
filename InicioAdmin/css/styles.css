@@ -54,7 +54,6 @@
     .imagen{
         display: block;
         align-items: center;
-        text-align: left;
         height: 50vh;
         img{
             width: auto;
