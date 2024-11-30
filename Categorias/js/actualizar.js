@@ -24,13 +24,13 @@ document.addEventListener('DOMContentLoaded', function () {
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary btn-modificar" 
+                                    <button class="btn btn-sm btn-primary btnIcono" 
                                         data-id="${categoria.id}" 
                                         data-nombre="${categoria.nombre}" 
                                         data-descripcion="${categoria.descripcion}" 
                                         data-toggle="modal" 
                                         data-target="#modificarServicio">
-                                        Editar
+                                        <i class="fas fa-edit"></i>
                                     </button>
                                 </td>
                             </tr>
