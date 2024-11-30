@@ -170,41 +170,6 @@
         </div>
     </div>
 
-
-<!-- Modal modificar estado del servicio -->
-<!-- <div class="modal fade" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog custom-modal-dialog" role="document">
-        <div class="modal-content custom-modal-content">
-            <div class="modal-header custom-modal-header">
-                <h5 class="modal-title custom-modal-title">Estado</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body custom-modal-body">
-                <form action="ModificarEstadoServicio" method="post">
-                    <h6 class="custom-modal-text" id="customModalLabel">¿Estás seguro de actualizar el estado del
-                        servicio?</h6>
-                    <div class="form-group custom-form-group" style="display: none">
-                        <label for="idDocente2" class="col-form-label custom-col-form-label">Matrícula:</label>
-                        <input type="text" class="form-control custom-form-control" id="idDocente2" name="idDocente2"
-                               placeholder="Matrícula" required>
-                    </div>
-                    <div class="form-group custom-form-group" style="display: none">
-                        <label for="estadoDocente" class="col-form-label custom-col-form-label">Estado:</label>
-                        <input type="text" class="form-control custom-form-control" id="estadoDocente"
-                               name="estadoDocente" placeholder="Estado" required>
-                    </div>
-                    <div class="modal-footer custom-modal-footer">
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> -->
-
 <div class="modal fade" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel"
      aria-hidden="true">
     <div class="modal-dialog custom-modal-dialog" role="document">
@@ -217,8 +182,8 @@
             </div>
             <div class="modal-body custom-modal-body">
                 <form id="formModificarEstado">
-                    <input id="idDocente2" name="idDocente2"> <!-- Campo oculto -->
-                    <input id="estadoDocente" name="estadoDocente"> <!-- Campo oculto -->
+                    <input id="idDocente2" name="idDocente2" type="hidden"> <!-- Campo oculto -->
+                    <input id="estadoDocente" name="estadoDocente" type="hidden"> <!-- Campo oculto -->
                     <h6>¿Estás seguro de actualizar el estado?</h6>
                     <div class="modal-footer custom-modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

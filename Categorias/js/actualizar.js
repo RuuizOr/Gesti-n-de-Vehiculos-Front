@@ -66,40 +66,61 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Botones de cambiar estado
         const btnsEstado = document.querySelectorAll('.cambiarEstado');
+        
         btnsEstado.forEach(btn => {
             btn.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
                 const statusActual = this.getAttribute('data-status') === 'true';
 
-                // Confirmar antes de cambiar el estado
-                if (confirm(`¿Seguro que quieres cambiar el estado de esta categoría?`)) {
-                    cambiarEstado(id, !statusActual);
-                }
+                // Mostrar el modal para cambiar el estado
+                document.getElementById('idDocente2').value = id;
+                document.getElementById('estadoDocente').value = statusActual ? 'true' : 'false';
+
+                // Mostrar el modal
+                $('#modificarEstadoServicio').modal('show');
             });
         });
     }
 
-    // Función para cambiar el estado
-    function cambiarEstado(id, nuevoEstado) {
-        fetch(`${API_URL}/status`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id, status: nuevoEstado })
-        })
-            .then(response => response.json())
-            .then(result => {
-                if (result.type === "SUCCESS") {
-                    const btn = document.querySelector(`.cambiarEstado[data-id="${id}"]`);
-                    if (btn) {
-                        btn.className = `btn btn-sm ${nuevoEstado ? 'btn-success' : 'btn-danger'} cambiarEstado`;
-                        btn.textContent = nuevoEstado ? 'Activo' : 'Inactivo';
-                        btn.setAttribute('data-status', nuevoEstado.toString()); // Actualiza el atributo
-                    }
-                }
+    // Función para cambiar el estado al enviar el formulario
+    const formModificarEstado = document.getElementById('formModificarEstado');
+    formModificarEstado.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Evitar recarga de página
+
+        const id = document.getElementById('idDocente2').value;
+        const nuevoEstado = document.getElementById('estadoDocente').value === 'true' ? false : true;
+
+        try {
+            const response = await fetch("http://localhost:8080/CategoriasDeServicios/status", {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id, status: nuevoEstado }),
+            });
+
+            if (response.ok) {
+                const result = await response.json();
                 alert(result.text || "Estado actualizado");
-            })
-            .catch(error => console.error("Error al cambiar el estado:", error));
-    }
+
+                // Actualizar el botón en la tabla
+                const btn = document.querySelector(`.cambiarEstado[data-id="${id}"]`);
+                if (btn) {
+                    btn.className = `btn btn-sm ${nuevoEstado ? 'btn-success' : 'btn-danger'} cambiarEstado`;
+                    btn.textContent = nuevoEstado ? 'Activo' : 'Inactivo';
+                    btn.setAttribute('data-status', nuevoEstado.toString());
+                }
+
+                // Cerrar el modal
+                $('#modificarEstadoServicio').modal('hide');
+            } else {
+                alert("Error al cambiar el estado.");
+            }
+        } catch (error) {
+            console.error("Error al cambiar el estado:", error);
+            alert("Hubo un problema al conectar con el servidor.");
+        }
+    });
+
+    agregarEventos();
     
 
     // Enviar cambios de categoría
