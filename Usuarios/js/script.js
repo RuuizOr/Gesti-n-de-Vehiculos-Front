@@ -1,52 +1,54 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const API_URL = "http://localhost:8080/api/usuarios"; // URL base
+  const API_URL = "http://localhost:8080/api/usuarios";
   const tableBody = document.getElementById("usuariosTableBody");
 
-  // Función para cargar los usuarios y llenar la tabla
-  function cargarUsuarios() {
-      fetch(API_URL)
-          .then(response => response.json())
-          .then(data => {
-              if (Array.isArray(data)) {
-                  tableBody.innerHTML = ""; // Limpiar tabla
-                  data.forEach(usuario => {
-                      const row = `
-                          <tr align="center" style="height: 20px; font-size: 15px">
-                              <td>${usuario.nombre}</td>
-                              <td>${usuario.email}</td>
-                              <td>${usuario.telefono}</td>
-                              <td>${usuario.rol}</td>
-                              <td>
-                                  <button class="btn btn-sm ${usuario.status ? "btn-success" : "btn-danger"} cambiarEstado" 
-                                      data-id="${usuario.id}" 
-                                      data-status="${usuario.status}">
-                                      ${usuario.status ? "Activo" : "Inactivo"}
-                                  </button>
-                              </td>
-                              <td>
-                                  <button class="btn btn-sm btn-primary btnIcono" 
-                                      data-id="${usuario.id}" 
-                                      data-nombre="${usuario.nombre}" 
-                                      data-apellidos="${usuario.apellidos}" 
-                                      data-email="${usuario.email}" 
-                                      data-telefono="${usuario.telefono}" 
-                                      data-rol="${usuario.rol}">
-                                      <i class="fas fa-edit"></i>
-                                  </button>
-                              </td>
-                          </tr>
-                      `;
-                      tableBody.innerHTML += row;
-                  });
-                  agregarEventos(); // Agregar eventos a botones dinámicos
-              } else {
-                  console.error("Estructura de datos inesperada:", data);
-              }
-          })
-          .catch(error => console.error("Error al cargar los usuarios:", error));
+  // Función para cargar los usuarios
+  async function cargarUsuarios() {
+      try {
+          const response = await fetch(API_URL);
+          const data = await response.json();
+
+          if (data.type === "SUCCESS" && Array.isArray(data.result)) {
+              tableBody.innerHTML = ""; // Limpia la tabla
+              data.result.forEach(usuario => {
+                  const row = `
+                      <tr align="center" style="height: 20px; font-size: 15px">
+                          <td>${usuario.nombre}</td>
+                          <td>${usuario.email}</td>
+                          <td>${usuario.telefono}</td>
+                          <td>${usuario.rol}</td>
+                          <td>
+                              <button class="btn btn-sm ${usuario.status ? "btn-success" : "btn-danger"} cambiarEstado" 
+                                  data-id="${usuario.id}" 
+                                  data-status="${usuario.status}">
+                                  ${usuario.status ? "Activo" : "Inactivo"}
+                              </button>
+                          </td>
+                          <td>
+                              <button class="btn btn-sm btn-primary btnIcono" 
+                                  data-id="${usuario.id}" 
+                                  data-nombre="${usuario.nombre}" 
+                                  data-apellidos="${usuario.apellidos}" 
+                                  data-email="${usuario.email}" 
+                                  data-telefono="${usuario.telefono}" 
+                                  data-rol="${usuario.rol}">
+                                  <i class="fas fa-edit"></i>
+                              </button>
+                          </td>
+                      </tr>
+                  `;
+                  tableBody.innerHTML += row;
+              });
+              agregarEventos();
+          } else {
+              console.error("Estructura de datos inesperada:", data);
+          }
+      } catch (error) {
+          console.error("Error al cargar los usuarios:", error);
+      }
   }
 
-  // Registrar usuario
+  // Función para manejar el registro de usuario
   const formRegistrarUsuario = document.querySelector("#formRegistrarUsuario");
   formRegistrarUsuario.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -157,6 +159,5 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   }
 
-  // Inicializar la tabla al cargar la página
   cargarUsuarios();
 });
