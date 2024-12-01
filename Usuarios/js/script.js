@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     const API_URL = "http://localhost:8080/api/usuarios";
     const tableBody = document.getElementById("usuariosTableBody");
+    const filterName = document.getElementById("filterName");
+    const filterState = document.getElementById("filterState");
 
     // Función para cargar los usuarios
     async function cargarUsuarios() {
@@ -10,7 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (data.type === "SUCCESS" && Array.isArray(data.result)) {
                 tableBody.innerHTML = ""; // Limpia la tabla
-                data.result.forEach(usuario => {
+                const filteredData = aplicarFiltros(data.result); // Aplica filtros al cargar los usuarios
+                filteredData.forEach(usuario => {
                     const row = `
                         <tr align="center" style="height: 20px; font-size: 15px">
                             <td>${usuario.nombre || "Sin Nombre"}</td>
@@ -47,6 +50,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // Función para aplicar los filtros
+    function aplicarFiltros(usuarios) {
+        let filteredUsers = usuarios;
+
+        // Filtrar por nombre
+        const nameFilter = filterName.value.trim().toLowerCase();
+        if (nameFilter) {
+            filteredUsers = filteredUsers.filter(usuario => 
+                usuario.nombre.toLowerCase().includes(nameFilter)
+            );
+        }
+
+        // Filtrar por estado
+        const stateFilter = filterState.value;
+        if (stateFilter) {
+            filteredUsers = filteredUsers.filter(usuario => 
+                (stateFilter === "Activo" && usuario.status) || 
+                (stateFilter === "NoActivo" && !usuario.status)
+            );
+        }
+
+        return filteredUsers;
+    }
+
     // Función para manejar el registro de usuario
     const formRegistrarUsuario = document.querySelector("#formRegistrarUsuario");
     formRegistrarUsuario.addEventListener("submit", async (event) => {
@@ -75,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (response.ok) {
-                $('#registrarUsuario').modal("hide");
+                $('#registrarUsuario').modal("hide"); // Asegúrate de cerrar solo una vez
                 cargarUsuarios();
             } else {
                 console.error("Error al registrar usuario:", await response.text());
@@ -155,6 +182,10 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
+
+    // Eventos de filtros
+    filterName.addEventListener("input", cargarUsuarios);
+    filterState.addEventListener("change", cargarUsuarios);
 
     // Carga inicial de usuarios
     cargarUsuarios();
