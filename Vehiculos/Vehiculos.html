@@ -83,9 +83,9 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarServicio" style="display: flex; justify-content: space-evenly; align-items: center">
+                        <button type="button" class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarVehiculo" style="display: flex; justify-content: space-evenly; align-items: center">
                             Registrar vehículo <i class="fa-solid fa-chalkboard-user"></i>
-                        </button>
+                        </button>                        
                     </div>
                 </div>
 
@@ -97,12 +97,12 @@
                                 <th>Modelo</th>
                                 <th>Marca</th>
                                 <th>Color</th>
-                                <th>Servicio</th>
+                                <!--<th>Servicio</th>-->
                                 <th>Estado</th>
                                 <th>Editar</th>
                             </tr>
                         </thead>
-                        <tbody id="aspirantesTableBody">
+                        <tbody id="vehiculosTableBody">
                             <!-- Aquí se llenarán dinámicamente las filas -->
                         </tbody>
                     </table>
@@ -111,6 +111,49 @@
             </div>
         </div>
     </div>
+
+
+
+
+
+
+    <div class="modal fade" id="registrarVehiculo" tabindex="-1" role="dialog" aria-labelledby="registrarVehiculoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registrarVehiculoLabel">Registrar Vehículo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formRegistrarVehiculo">
+                        <div class="form-group">
+                            <label for="modelo">Modelo:</label>
+                            <input type="text" class="form-control" id="modelo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="marca">Marca:</label>
+                            <input type="text" class="form-control" id="marca" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="color">Color:</label>
+                            <input type="text" class="form-control" id="color" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
 
     <!-- Modal para modificar el servicio -->
     <div class="modal fade" id="modificarServicio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -251,10 +294,5 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<script src="js/registrar.js"></script>
-<script src="js/verTodos.js"></script>
-<script src="js/actualizar.js"></script>
-<script src="js/cambioEstado.js"></script>
 
-
-
+<script src="js/script.js"></script>
