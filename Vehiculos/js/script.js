@@ -94,30 +94,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Modificar estado del vehículo
     const formModificarEstado = document.getElementById('formModificarEstado');
-    formModificarEstado.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        const id = document.getElementById('idDocente2').value;
-        const nuevoEstado = document.getElementById('estadoDocente').value === 'true' ? false : true;
+    if (formModificarEstado) {
+        formModificarEstado.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const id = document.getElementById('idDocente2').value;
+            const nuevoEstado = document.getElementById('estadoDocente').value === 'true' ? false : true;
 
-        try {
-            const response = await fetch(`${API_URL}/status`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, status: nuevoEstado }),
-            });
+            try {
+                const response = await fetch(`${API_URL}/status`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, status: nuevoEstado }),
+                });
 
-            if (response.ok) {
-                const result = await response.json();
-                $('#modificarEstadoVehiculo').modal('hide');
-                cargarVehiculos(); // Recargar la tabla después de cambiar el estado
-            } else {
-                console.error("Error al cambiar el estado.");
+                if (response.ok) {
+                    const result = await response.json();
+                    $('#modificarEstadoVehiculo').modal('hide');
+                    cargarVehiculos(); // Recargar la tabla después de cambiar el estado
+                } else {
+                    console.error("Error al cambiar el estado.");
+                }
+            } catch (error) {
+                console.error("Error al cambiar el estado:", error);
+                console.error("Hubo un problema al conectar con el servidor.");
             }
-        } catch (error) {
-            console.error("Error al cambiar el estado:", error);
-            console.error("Hubo un problema al conectar con el servidor.");
-        }
-    });
+        });
+    }
 
     // Modificar vehículo
     const formModificarVehiculo = document.getElementById('formModificarVehiculo');
@@ -165,8 +167,8 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.addEventListener('click', function () {
                 const id = this.getAttribute('data-id');
                 const statusActual = this.getAttribute('data-status') === 'true';
-                document.getElementById('idVehiculoEstado').value = id;
-                document.getElementById('estadoVehiculo').value = statusActual ? 'true' : 'false';
+                document.getElementById('idDocente2').value = id;
+                document.getElementById('estadoDocente').value = statusActual ? 'true' : 'false';
                 $('#modificarEstadoVehiculo').modal('show');
             });
         });
