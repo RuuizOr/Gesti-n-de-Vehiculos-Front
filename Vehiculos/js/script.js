@@ -44,6 +44,21 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Filtrar por nombre
+  filterName.addEventListener("input", () => {
+    const searchTerm = filterName.value.trim().toLowerCase();
+    const rows = tableBody.querySelectorAll("tr");
+    rows.forEach((row) => {
+      const nombre = row.children[0].textContent.trim().toLowerCase();
+      if (nombre.includes(searchTerm)) {
+        row.style.display = ""; // Mostrar
+      } else {
+        row.style.display = "none"; // Ocultar
+      }
+    });
+  });
+
+
     // Agregar nuevo vehículo
     const formRegistrar = document.getElementById("formRegistrarVehiculo");
     formRegistrar.addEventListener("submit", async function (event) {
