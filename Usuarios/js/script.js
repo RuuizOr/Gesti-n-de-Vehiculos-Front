@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_URL = "http://localhost:8080/api/usuarios";
+    const API_URL = "http://localhost:8080/usuarios/all";
     const tableBody = document.getElementById("usuariosTableBody");
     const filterName = document.getElementById("filterName");
     const filterState = document.getElementById("filterState");
@@ -33,12 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
                                     data-apellidos="${usuario.apellidos || ""}" 
                                     data-email="${usuario.email || ""}" 
                                     data-telefono="${usuario.telefono || ""}" 
-                                    data-rol="${usuario.rol || ""}">
+                                    
                                     <i class="fas fa-edit"></i>
                                 </button>
                             </td>
                         </tr>
                     `;
+                    //data-rol="${usuario.rol || ""}">  
                     tableBody.innerHTML += row;
                 });
                 agregarEventos();
@@ -74,66 +75,50 @@ document.addEventListener("DOMContentLoaded", () => {
         return filteredUsers;
     }
 
-    // Función para manejar el registro de usuario
-    const formRegistrarUsuario = document.querySelector("#formRegistrarUsuario");
-    formRegistrarUsuario.addEventListener("submit", async (event) => {
-        event.preventDefault();
+    // Función para modificar el usuario
+async function modificarUsuario(usuarioData) {
+    try {
+        const response = await fetch("http://localhost:8080/usuarios/save", {
+            method: "PUT", // Usar PUT o PATCH según tu API
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(usuarioData), // Los datos del usuario a modificar
+        });
 
+        if (response.ok) {
+            // Si la solicitud es exitosa, recargamos la lista de usuarios
+            cargarUsuarios();
+        } else {
+            console.error("Error al modificar usuario:", await response.text());
+        }
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+    }
+}
+
+// Modificar estado del usuario
+tableBody.addEventListener("click", async (event) => {
+    if (event.target.classList.contains("cambiarEstado")) {
+        const button = event.target;
+        const id = button.dataset.id;
+
+        // Buscar los datos del usuario (esto es solo un ejemplo, depende de tu lógica)
         const usuarioData = {
+            id: id,
             nombre: document.getElementById("nombre").value.trim(),
             apellidos: document.getElementById("apellidos").value.trim(),
             email: document.getElementById("email").value.trim(),
             telefono: document.getElementById("telefono").value.trim(),
             contraseña: document.getElementById("contrasena").value.trim(),
             rol: document.getElementById("rol").value.trim(),
-            status: true,
+            status: true, // O el valor que necesites modificar
         };
 
-        if (Object.values(usuarioData).some(value => !value)) {
-            alert("Por favor, complete todos los campos.");
-            return;
-        }
+        // Llamamos a la función modificarUsuario con los nuevos datos
+        await modificarUsuario(usuarioData);
+    }
+});
 
-        try {
-            const response = await fetch(`${API_URL}/save`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(usuarioData),
-            });
-
-            if (response.ok) {
-                $('#registrarUsuario').modal("hide"); // Asegúrate de cerrar solo una vez
-                cargarUsuarios();
-            } else {
-                console.error("Error al registrar usuario:", await response.text());
-            }
-        } catch (error) {
-            console.error("Error en la solicitud:", error);
-        }
-    });
-
-    // Modificar estado del usuario
-    tableBody.addEventListener("click", async (event) => {
-        if (event.target.classList.contains("cambiarEstado")) {
-            const button = event.target;
-            const id = button.dataset.id;
-
-            try {
-                // Enviamos la solicitud DELETE para cambiar el estado del usuario
-                const response = await fetch(`${API_URL}/${id}`, {
-                    method: "DELETE",
-                });
-
-                if (response.ok) {
-                    cargarUsuarios(); // Recargamos la lista de usuarios
-                } else {
-                    console.error("Error al cambiar estado:", await response.text());
-                }
-            } catch (error) {
-                console.error("Error en la solicitud:", error);
-            }
-        }
-    });
+  
 
     // Modificar usuario
     const formModificarUsuario = document.querySelector("#formModificarUsuario");
@@ -151,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch(`${API_URL}/${id}`, {
+            const response = await fetch(`http://localhost:8080/usuarios/status`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(usuarioData),

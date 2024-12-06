@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <td>${categoria.nombre}</td>
                                 <td>${categoria.descripcion}</td>
                                 <td>
-                                    <button class="btn btn-sm ${
+                                    <button  id="botonStatus" class="btn btn-sm  ${
                                         categoria.status ? 'btn-success' : 'btn-danger'
                                     } cambiarEstado" 
                                         data-id="${categoria.id}" 
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary btnIcono" 
+                                    <button  class="btn btn-sm btn-primary btnIcono" id="a1221"
                                         data-id="${categoria.id}" 
                                         data-nombre="${categoria.nombre}" 
                                         data-descripcion="${categoria.descripcion}" 

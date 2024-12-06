@@ -80,7 +80,7 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarServicio" style="display: flex; justify-content: space-evenly; align-items: center">
+                        <button id="Registrarservicio" type="button"  class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarServicio" style="display: flex; justify-content: space-evenly; align-items: center">
                             Registrar servicio <i class="fa-solid fa-chalkboard-user"></i>
                         </button>
                     </div>
@@ -121,21 +121,21 @@
                 <div class="modal-body">
                     <form id="formRegistrarServicio" action="javascript:void(0);">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="50" placeholder=" " required>
+                            <input type="text" class="form-control" id="nombreser" name="nombre" maxlength="50" placeholder=" " required>
                             <label for="nombre" class="col-form-label">Nombre:</label>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="descripcion" name="descripcion" maxlength="50" placeholder=" " required>
+                            <input type="text" class="form-control" id="descripcionser" name="descripcion" maxlength="50" placeholder=" " required>
                             <label for="descripcion" class="col-form-label">Descripción:</label>
                         </div>
                         <div class="form-group">
-                            <select class="form-control" id="categoria" name="categoria">
+                            <select class="form-control" id="categoriaser" name="categoria">
                                 <option value="">Seleccione una categoría</option>
                             </select>
                             <label for="categoria" class="col-form-label">Categoría:</label>
                         </div>                        
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Registrar</button>
+                            <button type="submit" id="registrar3" class="btn btn-primary">Registrar</button>
                         </div>
                     </form>
                 </div>
@@ -224,7 +224,7 @@
                     <input id="estadoDocente" name="estadoDocente" type="hidden"> <!-- Campo oculto -->
                     <h6>¿Estás seguro de actualizar el estado?</h6>
                     <div class="modal-footer custom-modal-footer">
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button type="submit" id="actualizarStatus" class="btn btn-primary">Actualizar</button>
                     </div>
                 </form>
             </div>

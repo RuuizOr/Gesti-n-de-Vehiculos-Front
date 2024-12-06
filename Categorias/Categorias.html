@@ -74,13 +74,13 @@
                     </div>
                     <div class="col-md-3">
                         <select id="filterState" class="custom-select" required>
-                            <option value="">Estado</option>
-                            <option value="Activo">Activo</option>
+                            <option  value="">Estado</option>
+                            <option id="activo" value="Activo">Activo</option>
                             <option value="NoActivo">No Activo</option>
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarServicio" style="display: flex; justify-content: space-evenly; align-items: center">
+                        <button type="button" class="btn btnIcono w-100" data-toggle="modal" id="registrar" data-target="#registrarServicio" style="display: flex; justify-content: space-evenly; align-items: center">
                             Registrar categoría <i class="fa-solid fa-chalkboard-user"></i>
                         </button>
                     </div>
@@ -128,7 +128,7 @@
                             <label for="descripcion" class="col-form-label">Descripción:</label>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Registrar</button>
+                            <button type="submit" class="btn btn-primary" id="registrar2">Registrar</button>
                         </div>
                     </form>
                 </div>
@@ -159,7 +159,7 @@
                             <label for="descripcionMod" class="col-form-label">Descripción:</label>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                            <button type="submit" id="actualizaract" class="btn btn-primary">Actualizar</button>
                         </div>
                     </form>
                 </div>
@@ -183,7 +183,7 @@
                     <input id="estadoDocente" name="estadoDocente" type="hidden"> <!-- Campo oculto -->
                     <h6>¿Estás seguro de actualizar el estado?</h6>
                     <div class="modal-footer custom-modal-footer">
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
+                        <button id="actualizarStatus" type="submit" class="btn btn-primary">Actualizar</button>
                     </div>
                 </form>
             </div>

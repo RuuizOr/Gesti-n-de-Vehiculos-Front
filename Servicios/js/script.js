@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <td>${servicio.descripcion}</td>
                             <td>${servicio.categoria.nombre}</td>
                             <td>
-                                <button class="btn btn-sm ${servicio.status ? 'btn-success' : 'btn-danger'} cambiarEstado"
+                                <button id="botonStatus"" class="btn btn-sm ${servicio.status ? 'btn-success' : 'btn-danger'} cambiarEstado"
                                         data-id="${servicio.id}" 
                                         data-status="${servicio.status}" 
                                         data-toggle="modal" 
