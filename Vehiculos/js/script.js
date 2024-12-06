@@ -44,6 +44,86 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Filtrar por nombre
+  filterName.addEventListener("input", () => {
+    const searchTerm = filterName.value.trim().toLowerCase();
+    const rows = tableBody.querySelectorAll("tr");
+    rows.forEach((row) => {
+      const nombre = row.children[0].textContent.trim().toLowerCase();
+      if (nombre.includes(searchTerm)) {
+        row.style.display = ""; // Mostrar
+      } else {
+        row.style.display = "none"; // Ocultar
+      }
+    });
+  });
+
+
+    // Agregar nuevo vehículo
+    const formRegistrar = document.getElementById("formRegistrarVehiculo");
+    formRegistrar.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const modelo = document.getElementById("modelo").value.trim();
+        const marca = document.getElementById("marca").value.trim();
+        const color = document.getElementById("color").value.trim();
+
+        if (modelo && marca && color) {
+            try {
+                const response = await fetch(`${API_URL}/registrar`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ modelo, marca, color, status: true }),
+                });
+
+                if (response.ok) {
+                    formRegistrar.reset();
+                    $('#registrarVehiculo').modal('hide'); // Cierra el modal después del registro
+                    cargarVehiculos(); // Recarga la tabla
+                } else {
+                    console.error("Error al registrar el vehículo. Verifique los datos.");
+                }
+            } catch (error) {
+                console.error("Error en la solicitud:", error);
+            }
+        } else {
+            console.error("Por favor, complete todos los campos.");
+        }
+    });
+
+    // Editar un vehículo existente
+    const formModificarVehiculo = document.getElementById("formModificarVehiculo");
+    formModificarVehiculo.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const id = document.getElementById("idMod").value;
+        const modelo = document.getElementById("modeloMod").value.trim();
+        const marca = document.getElementById("marcaMod").value.trim();
+        const color = document.getElementById("colorMod").value.trim();
+
+        if (id && modelo && marca && color) {
+            try {
+                const response = await fetch(`${API_URL}/actualizar`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ id, modelo, marca, color, status: true }),
+                });
+
+                if (response.ok) {
+                    formModificarVehiculo.reset();
+                    $('#modificarVehiculo').modal('hide'); // Cierra el modal después de la edición
+                    cargarVehiculos(); // Recarga la tabla
+                } else {
+                    console.error("Error al modificar el vehículo. Verifique los datos.");
+                }
+            } catch (error) {
+                console.error("Error en la solicitud:", error);
+            }
+        } else {
+            console.error("Por favor, complete todos los campos.");
+        }
+    });
+
     // Cambiar estado de un vehículo
     document.getElementById("formModificarEstado").addEventListener("submit", async function (event) {
         event.preventDefault();
