@@ -102,7 +102,6 @@ body, html {
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
     padding: 10px;
     color: white;
     text-align: left;
@@ -113,4 +112,31 @@ body, html {
     color: white;
     text-decoration: none;
     padding: 10px;
+}
+
+.tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    left: 100%; /* Tooltip aparece a la derecha del elemento */
+    top: 50%; /* Centrado verticalmente con respecto al elemento */
+    transform: translateY(-50%); /* Para asegurarse de que esté centrado verticalmente */
+    background-color: #092EA4; /* Fondo azul */
+    color: #fff;
+    padding: 4px 6px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    transition: opacity 0.3s ease, visibility 0s 0.3s, transform 0.3s ease;
+    z-index: 1;
+}
+
+.salirInicio:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-50%) translateX(10px); /* Ligeramente desplazado a la derecha con animación */
+    transition: opacity 0.3s ease, visibility 0s, transform 0.3s ease;
 }
