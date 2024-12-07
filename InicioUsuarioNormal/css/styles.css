@@ -1,6 +1,69 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+.video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+.wrapper {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 10px;
+    justify-content: center; /* Centrar contenido verticalmente */
+    align-items: center; /* Centrar contenido horizontalmente */
+    text-align: center; /* Alinear texto al centro */
+}
+.text-light, .navbar-brand {
+    color: #fff !important;
+}
+.card {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex; /* Activar Flexbox */
+    flex-direction: column; /* Alinear elementos verticalmente */
+    justify-content: center; /* Centrar contenido verticalmente */
+    align-items: center; /* Centrar contenido horizontalmente */
+    text-align: center; /* Alinear texto al centro */
+}
+
+.card-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px; /* Espacio entre el título y el botón */
+}
+
+.card .btn {
+    background-color: #092EA4;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.card .btn:hover {
+    background-color: rgb(4, 56, 110);
+    color: #fff;
+}
+
+
 .usuarios{
-    color: #092e95;
-    height: 135px;
+    color: #ffffff;
     a{
         background-color: #092e95;
         color: #fff;
@@ -9,8 +72,7 @@
 }
 
 .clientes{
-    color: #198754;
-    height: 135px;
+    color: #ffffff;
     a{
         background-color: #198754;
         color: #fff;
@@ -19,8 +81,7 @@
 }
 
 .vehiculos{
-    color: #dc3545;
-    height: 135px;
+    color: #ffffff;
     a{
         background-color: #dc3545;
         color: #fff;
@@ -29,44 +90,10 @@
 }
 
 .servicios{
-    color: #ffc107;
-    height: 135px;
+    color: #ffffff;
     a{
         background-color: #ffc107;
         color: #fff;
         border: none;
-    }
-}
-
-.imagen{
-    display: block;
-    align-items: center;
-    text-align: center;
-    height: 50vh;
-    img{
-        width: auto;
-        height: 50vh;
-        object-fit: cover;
-    }
-}
-
-@media (max-width: 1580px) {
-    .imagen{
-        display: block;
-        align-items: center;
-        height: 50vh;
-        img{
-            width: auto;
-            max-width: 100vw;
-            height: 50vh;
-            object-fit: cover;
-        }
-    }
-}
-
-
-@media (max-width: 767px) {
-    .imagen{
-        display: none;
     }
 }
