@@ -10,6 +10,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="../InicioAdmin/img/inicio.png">
     <link rel="stylesheet" href="css/stylesNavBar.css">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/estilosModal.css">
 </head>
 <body>
     <div class="wrapper" style="height: 100vh;">
@@ -20,7 +21,7 @@
               
               <nav class="navbar bg-transparent">
                 <div class="container-fluid justify-content-end">
-                  <a class="navbar-brand text-white" href="#">
+                  <a class="navbar-brand text-white" data-toggle="modal" data-target="#modificarUsuario">
                     <i class="fa-solid fa-user-shield text-white"></i>
                     ADMIN
                   </a>
@@ -71,5 +72,59 @@
         </div>
     </div>
     
+    <!-- Modificar datos del usuario -->
+    <div class="modal fade" id="modificarUsuario" tabindex="-1" role="dialog" aria-labelledby="modificarUsuarioLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="modificarUsuarioLabel">Datos del Usuario</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form id="formModificarUsuario" action="javascript:void(0);">
+                      <!-- Nombre -->
+                      <div class="form-group">
+                          <input type="text" class="form-control" id="nombreMod" name="nombreMod" maxlength="50" placeholder=" " required>
+                          <label for="nombreMod" class="col-form-label">Nombre:</label>
+                      </div>
+                      <!-- Apellido -->
+                      <div class="form-group">
+                          <input type="text" class="form-control" id="apellidosMod" name="apellidosMod" maxlength="50" placeholder=" " required>
+                          <label for="apellidosMod" class="col-form-label">Apellido:</label>
+                      </div>
+                      <!-- Correo -->
+                      <div class="form-group">
+                          <input type="email" class="form-control" id="emailMod" name="emailMod" maxlength="50" placeholder=" " required>
+                          <label for="emailMod" class="col-form-label">Correo:</label>
+                      </div>
+                      <!-- Teléfono -->
+                      <div class="form-group">
+                          <input type="tel" class="form-control" id="telefonoMod" name="telefono" maxlength="50" placeholder=" " required>
+                          <label for="telefonoMod" class="col-form-label">Teléfono:</label>
+                      </div>
+                      <!-- Contraseña -->
+                      <div class="form-group">
+                          <input type="password" class="form-control" id="contrasenaMod" name="contrasena" maxlength="50" placeholder=" " required>
+                          <label for="contrasenaMod" class="col-form-label">Contraseña:</label>
+                      </div>
+                      <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
 </body>
 </html>
+
+
+<!-- Scripts utilizados -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="js/script.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
