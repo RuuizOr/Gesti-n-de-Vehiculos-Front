@@ -254,3 +254,37 @@ h1 {
     margin-bottom: 1.5rem;
 }
 
+
+.tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 50%; /* Centrado verticalmente respecto al botón */
+    left: 100%; /* Aparece a la derecha del botón */
+    transform: translateY(-50%); /* Para centrarlo verticalmente respecto al botón */
+    background-color: #ea2121; /* Fondo azul */
+    color: #fff;
+    padding: 4px 6px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+    transition: opacity 0.3s ease, visibility 0s 0.3s, transform 0.3s ease;
+    z-index: 1;
+}
+
+.sidebar-item:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-50%) translateX(10px); /* Ligeramente desplazado a la derecha con animación */
+    transition: opacity 0.3s ease, visibility 0s, transform 0.3s ease;
+}
+
+.sidebar-footer:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-50%) translateX(10px); /* Ligeramente desplazado a la derecha con animación */
+    transition: opacity 0.3s ease, visibility 0s, transform 0.3s ease;
+}
