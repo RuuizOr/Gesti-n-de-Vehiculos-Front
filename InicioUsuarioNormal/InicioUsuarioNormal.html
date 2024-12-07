@@ -16,6 +16,12 @@
     <video autoplay loop muted playsinline class="video-background">
         <source src="img/fondo.mp4" type="video/mp4">
     </video>
+    <div class="salirInicio background-color" title="Salir">
+        <a href="../Login/Login.html" class="sidebar-link">
+            <i class="fas fa-right-from-bracket"></i>
+            <span>Salir</span>
+        </a>
+    </div>
     <div class="wrapper">
         <div class="container text-center">
             <nav class="navbar bg-transparent">
@@ -59,24 +65,24 @@
                 <div class="modal-body">
                     <form id="formModificarUsuario">
                         <div class="form-group">
+                            <input type="text" class="form-control" id="nombreMod" name="nombreMod" maxlength="50" placeholder=" " required>
                             <label for="nombreMod" class="col-form-label">Nombre:</label>
-                            <input type="text" class="form-control" id="nombreMod" name="nombreMod" maxlength="50" required>
                         </div>
                         <div class="form-group">
+                            <input type="text" class="form-control" id="apellidosMod" name="apellidosMod" maxlength="50" placeholder=" " required>
                             <label for="apellidosMod" class="col-form-label">Apellido:</label>
-                            <input type="text" class="form-control" id="apellidosMod" name="apellidosMod" maxlength="50" required>
                         </div>
                         <div class="form-group">
+                            <input type="email" class="form-control" id="emailMod" name="emailMod" maxlength="50" placeholder=" " required>
                             <label for="emailMod" class="col-form-label">Correo:</label>
-                            <input type="email" class="form-control" id="emailMod" name="emailMod" maxlength="50" required>
                         </div>
                         <div class="form-group">
+                            <input type="tel" class="form-control" id="telefonoMod" name="telefono" maxlength="50" placeholder=" " required>
                             <label for="telefonoMod" class="col-form-label">Teléfono:</label>
-                            <input type="tel" class="form-control" id="telefonoMod" name="telefono" maxlength="50" required>
                         </div>
                         <div class="form-group">
+                            <input type="password" class="form-control" id="contrasenaMod" name="contrasena" maxlength="50" placeholder=" " required>
                             <label for="contrasenaMod" class="col-form-label">Contraseña:</label>
-                            <input type="password" class="form-control" id="contrasenaMod" name="contrasena" maxlength="50" required>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>

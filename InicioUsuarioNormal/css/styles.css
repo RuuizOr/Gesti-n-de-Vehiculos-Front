@@ -97,3 +97,20 @@ body, html {
         border: none;
     }
 }
+
+.salirInicio {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    text-align: left;
+    z-index: 9999;
+}
+
+.sidebar-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
