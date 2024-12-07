@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="../Servicios/img/servicios.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/estilosModal.css">
+    <link rel="stylesheet" href="css/estilosTabla.css">
+    <script src="https://kit.fontawesome.com/8f2cb0ebcf.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="wrapper" style="height: 100vh;">
+        <aside id="sidebar">
+            <div class="d-flex">
+                <button class="toggle-btn logo" type="button">
+                    <img class="imagenLogo" src="../Login/img/logoo.png">
+                </button>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="sidebar-item" title="Inicio">
+                    <a href="../InicioUsuarioNormal/InicioUsuarioNormal.html" class="sidebar-link">
+                        <i class="fa-solid fa-house"></i>
+                        <span>Inicio</span>
+                    </a>
+                <li class="sidebar-item" title="Servicios">
+                    <a href="../ServiciosUsuarios/ServiciosUsuarios.html" class="sidebar-link">
+                        <i class="fa-solid fa-toolbox"></i>
+                        <span>Servicios</span>
+                    </a>
+                </li>
+                <li class="sidebar-item" title="Vehículos">
+                    <a href="../VehiculosUsuarios/VehiculosUsuarios.html" class="sidebar-link">
+                        <i class="fa-solid fa-car"></i>
+                        <span>Vehículos</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer background-color" title="Salir">
+                <a href="../Login/Login.html" class="sidebar-link">
+                    <i class="fas fa-right-from-bracket"></i>
+                    <span>Salir</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Cuerpo de la página -->
+        <div class="main">
+            <div class="container mt-4 text-center">
+                <h1 class="mb-4 text-light">Servicios</h1>
+                
+                <!-- Filtros y botón de registro -->
+                <div class="row mb-3 justify-content-center">
+                    <div class="col-md-3">
+                        <input type="text" id="filterName" class="form-control" placeholder="Buscar por nombre">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filterState" class="custom-select" required>
+                            <option value="">Estado</option>
+                            <option value="Activo">Activo</option>
+                            <option value="NoActivo">No Activo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Tabla de datos del servicio -->
+                <div class="container-xxl tabla mt-5">
+                    <table class="table" id="example">
+                        <thead class="thead-light">
+                            <tr align="center">
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Categoría</th>
+                                <th>Estado</th>
+                                <th>Editar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="serviciosTableBody">
+                            <!-- Aquí se llenarán dinámicamente las filas -->
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
+
+<!-- Scripts utilizados -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="js/script.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+

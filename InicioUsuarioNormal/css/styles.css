@@ -1,0 +1,72 @@
+.usuarios{
+    color: #092e95;
+    height: 135px;
+    a{
+        background-color: #092e95;
+        color: #fff;
+        border: none;
+    }
+}
+
+.clientes{
+    color: #198754;
+    height: 135px;
+    a{
+        background-color: #198754;
+        color: #fff;
+        border: none;
+    }
+}
+
+.vehiculos{
+    color: #dc3545;
+    height: 135px;
+    a{
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+    }
+}
+
+.servicios{
+    color: #ffc107;
+    height: 135px;
+    a{
+        background-color: #ffc107;
+        color: #fff;
+        border: none;
+    }
+}
+
+.imagen{
+    display: block;
+    align-items: center;
+    text-align: center;
+    height: 50vh;
+    img{
+        width: auto;
+        height: 50vh;
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 1580px) {
+    .imagen{
+        display: block;
+        align-items: center;
+        height: 50vh;
+        img{
+            width: auto;
+            max-width: 100vw;
+            height: 50vh;
+            object-fit: cover;
+        }
+    }
+}
+
+
+@media (max-width: 767px) {
+    .imagen{
+        display: none;
+    }
+}
