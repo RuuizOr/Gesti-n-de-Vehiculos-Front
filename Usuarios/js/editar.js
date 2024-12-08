@@ -3,6 +3,9 @@ $('#modificarUsuario').on('show.bs.modal', function (event) {
 
     // Capturar los datos del botón
     const id = button.data('id') || '';
+    console.log('data')
+    console.log(button)
+    console.log(button.data('contrasena'))
     const nombre = button.data('nombre') || '';
     const apellidos = button.data('apellidos') || '';
     const email = button.data('correo') || '';

@@ -51,14 +51,24 @@ async function obtenerUsuarios() {
                     <td>${usuario.email}</td>
                     <td>${usuario.telefono}</td>
                     <td>${rol}</td>
-                    <td>${usuario.status ? "Activo" : "Inactivo"}</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning btnIcono"
+                            data-id="${usuario.id}" 
+                            data-estado="${usuario.status}" 
+                            data-toggle="modal" 
+                            data-target="#modificarEstadoServicio">
+                            <i class="fas fa-sync-alt"></i> ${usuario.status ? "Activo" : "Inactivo"}
+                        </button>
+                    </td>
                     <td>
                         <button class="btn btn-sm btn-primary btnIcono"
                             data-id="${usuario.id}" 
                             data-nombre="${usuario.nombre}" 
-                            data-correo="${usuario.email}" 
+                            data-apellidos="${usuario.apellidos}"
+                            data-correo="${usuario.email}"  
                             data-telefono="${usuario.telefono}" 
-                            data-rol="${rol}" 
+                            data-contrasena="${usuario.contraseña}" 
+                            data-rol="${usuario.admin ==="ROLE_ADMIN" ? 'admin': 'usuario'}" 
                             data-estado="${usuario.status}" 
                             data-toggle="modal" 
                             data-target="#modificarUsuario">
