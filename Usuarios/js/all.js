@@ -52,7 +52,7 @@ async function obtenerUsuarios() {
                     <td>${usuario.telefono}</td>
                     <td>${rol}</td>
                     <td>
-                        <button class="btn btn-sm btn-warning btnIcono"
+                        <button class="btn btn-sm ${usuario.status ? 'btn-success' : 'btn-danger'}"
                             data-id="${usuario.id}" 
                             data-estado="${usuario.status}" 
                             data-toggle="modal" 
