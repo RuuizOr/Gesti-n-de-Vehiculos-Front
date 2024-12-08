@@ -1,16 +1,75 @@
-const jwt = localStorage.getItem('jwt');
-
-fetch('http://localhost:8080/CategoriasDeServicios', {
-    method: 'GET',  // O el método que necesites (POST, PUT, DELETE)
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwt}`  // Aquí se agrega el token en el encabezado 'Authorization'
+async function obtenerCategorias() {
+    // Obtener el token JWT desde localStorage
+    const token = localStorage.getItem('jwt');
+    console.log("Token JWT obtenido:", token);
+    
+    // Verificar si el token existe
+    if (!token) {
+        console.log('No se encontró el token en el localStorage');
+        alert('No se encontró el token. Por favor, inicie sesión.');
+        return;
     }
-})
-.then(response => response.json())
-.then(data => {
-    console.log('Datos recibidos:', data);
-})
-.catch(error => {
-    console.error('Error:', error);
-});
+
+    const url = 'http://localhost:8080/CategoriasDeServicios/all';  // URL de la API
+
+    try {
+        // Realizar la solicitud GET con el token en el encabezado
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
+                'Accept': 'application/json',         // Aceptar respuesta en formato JSON
+                'Content-Type': 'application/json'    // Especificar que enviamos/recibimos JSON
+            }
+        });
+
+        // Verificar si la respuesta fue exitosa
+        if (!response.ok) {
+            throw new Error('Error en la red: ' + response.statusText);
+        }
+
+        // Convertir la respuesta a JSON
+        const data = await response.json();
+
+        // Mostrar los datos recibidos en la consola
+        console.log('Datos recibidos:', data);
+
+        // Obtener el cuerpo de la tabla
+        const tableBody = document.getElementById('aspirantesTableBody');
+        
+        // Limpiar cualquier contenido previo en la tabla
+        tableBody.innerHTML = '';
+
+        // Recorrer los datos y crear las filas de la tabla
+        data.result.forEach(categoria => {
+            const row = `
+                <tr align="center">
+                    <td>${categoria.nombre}</td>
+                    <td>${categoria.descripcion}</td>
+                    <td>${categoria.estado ? "Activo" : "Inactivo"}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary btnIcono"
+                            data-id="${categoria.id}" 
+                            data-nombre="${categoria.nombre}" 
+                            data-descripcion="${categoria.descripcion}" 
+                            data-toggle="modal" 
+                            data-target="#modificarCategoria">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+            // Insertar la fila en la tabla
+            tableBody.innerHTML += row;
+        });
+
+    } catch (error) {
+        // Manejar errores de la solicitud
+        console.error('Hubo un problema con la solicitud:', error);
+        alert('Ocurrió un error al intentar obtener los datos.');
+    }
+}
+
+// Llamar la función para obtener los datos cuando la página carga
+obtenerCategorias();
