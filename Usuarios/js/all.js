@@ -36,8 +36,8 @@ async function obtenerUsuarios() {
         // Llenar la tabla con los datos de los usuarios
         const usuariosTableBody = document.getElementById('usuariosTableBody');
         usuariosTableBody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
-            //admin indica el rol
-            let rol;
+        let rol;
+        
         // Iterar sobre los datos de los usuarios y crear filas dinámicamente
         data.result.forEach(usuario => {
             if(usuario.admin ==="ROLE_USER"){
@@ -45,6 +45,7 @@ async function obtenerUsuarios() {
             }else if(usuario.admin ==="ROLE_ADMIN"){
                 rol = "Administrador"
             }
+            
             const row = `
                 <tr align="center">
                     <td>${usuario.nombre}</td>
@@ -89,3 +90,40 @@ async function obtenerUsuarios() {
 
 // Llamar la función para obtener los datos de los usuarios al cargar la página
 obtenerUsuarios();
+
+// Función para filtrar los usuarios
+function filtrarUsuarios() {
+    const nombre = document.getElementById('filterName').value.toLowerCase();
+    const estado = document.getElementById('filterState').value;
+
+    // Obtener todas las filas de la tabla
+    const filas = document.querySelectorAll('#usuariosTableBody tr');
+
+    // Iterar sobre todas las filas
+    filas.forEach(fila => {
+        const nombreUsuario = fila.cells[0].textContent.toLowerCase();
+        // Obtener el estado desde el botón dentro de la fila
+        const estadoBoton = fila.querySelector('button').getAttribute('data-estado'); // Obtener el estado del botón
+
+        // Comprobar si la fila cumple con los filtros
+        const coincideNombre = nombreUsuario.includes(nombre);
+
+        let coincideEstado = true; // Si no se selecciona estado, coincide siempre
+        if (estado) {
+            // Compara si el estado seleccionado corresponde con el estado del usuario
+            coincideEstado = (estado === 'Activo' && estadoBoton === 'true') ||
+                             (estado === 'Inactivo' && estadoBoton === 'false');
+        }
+
+        // Mostrar u ocultar la fila según los filtros
+        if (coincideNombre && coincideEstado) {
+            fila.style.display = ''; // Mostrar la fila
+        } else {
+            fila.style.display = 'none'; // Ocultar la fila
+        }
+    });
+}
+
+// Agregar eventos a los filtros
+document.getElementById('filterName').addEventListener('input', filtrarUsuarios);
+document.getElementById('filterState').addEventListener('change', filtrarUsuarios);
