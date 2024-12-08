@@ -239,7 +239,19 @@ a.sidebar-link:hover {
     z-index: -1; /* Coloca el video detrás del contenido */
     opacity: 1; /* Asegura que el video sea visible */
 }
+
+/* Media Query para pantallas pequeñas (como celulares) */
+@media (max-width: 768px) {
+    /* Ocultar el video en pantallas pequeñas */
+    #videoBackground {
+        display: none;
+    }
     
+    /* Asegurarse de que el fondo sea negro cuando el video no se muestra */
+    body {
+        background-color: #000; /* Mantener el fondo negro */
+    }
+}
 
 /* Estilos adicionales para el contenido de la página */
 .main {
