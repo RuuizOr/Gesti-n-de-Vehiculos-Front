@@ -1,19 +1,41 @@
 document.addEventListener('DOMContentLoaded', function () {
     // URLs de la API
     const API_URL_SERVICIOS = "http://localhost:8080/servicios";
-    const API_URL_CATEGORIAS = "http://localhost:8080/CategoriasDeServicios/activos";
+    const API_URL_CATEGORIAS = "http://localhost:8080/CategoriasDeServicios/all";
 
     const tableBody = document.getElementById("serviciosTableBody");
-    const categoriaSelect = document.querySelector("#categoria");
+    const categoriaSelect = document.querySelector("#categoriaser");
     const categoriaSelectMod = document.querySelector("#categoriaMod");
+
+    // Obtener el token JWT desde localStorage
+    const token = localStorage.getItem('jwt');
+    console.log("Token JWT obtenido:", token);
+
+    // Verificar si el token existe
+    if (!token) {
+        console.log('No se encontró el token en el localStorage');
+        alert('No se encontró el token. Por favor, inicie sesión.');
+        return;
+    }
 
     // Función para cargar las categorías y llenar el <select> de registro y modificación
     async function cargarCategorias() {
         try {
-            const response = await fetch(API_URL_CATEGORIAS);
+            const response = await fetch(`${API_URL_CATEGORIAS}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
+                    'Accept': 'application/json',         // Aceptar respuesta en formato JSON
+                    'Content-Type': 'application/json'    // Especificar que enviamos/recibimos JSON
+                }
+            });
             const data = await response.json();
 
+            console.log("Datos de categorías recibidos:", data);
+
             if (data && Array.isArray(data.result)) {
+                categoriaSelect.innerHTML = '<option value="">Seleccione una categoría</option>';
+                categoriaSelectMod.innerHTML = '<option value="">Seleccione una categoría</option>';
+
                 data.result.forEach(categoria => {
                     const option = document.createElement("option");
                     option.value = categoria.id;
@@ -31,43 +53,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Filtrar por nombre
-  filterName.addEventListener("input", () => {
-    const searchTerm = filterName.value.trim().toLowerCase();
-    const rows = tableBody.querySelectorAll("tr");
-    rows.forEach((row) => {
-      const nombre = row.children[0].textContent.trim().toLowerCase();
-      if (nombre.includes(searchTerm)) {
-        row.style.display = ""; // Mostrar
-      } else {
-        row.style.display = "none"; // Ocultar
-      }
-    });
-  });
-
-  // Filtrar por estado
-  filterState.addEventListener("change", () => {
-    const selectedState = filterState.value.toLowerCase();
-    const rows = tableBody.querySelectorAll("tr");
-    rows.forEach((row) => {
-      const estado = row.children[3].textContent.trim().toLowerCase();
-      if (
-        selectedState === "" || // Mostrar todos si no hay selección
-        (selectedState === "activo" && estado === "activo") ||
-        (selectedState === "noactivo" && estado === "inactivo")
-      ) {
-        row.style.display = ""; // Mostrar
-      } else {
-        row.style.display = "none"; // Ocultar
-      }
-    });
-  });
-
     // Función para cargar y mostrar los servicios
     async function mostrarServicios() {
         try {
-            const response = await fetch(`${API_URL_SERVICIOS}/all`);
+            const response = await fetch(`${API_URL_SERVICIOS}/all`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
+                    'Accept': 'application/json',         // Aceptar respuesta en formato JSON
+                    'Content-Type': 'application/json'    // Especificar que enviamos/recibimos JSON
+                }
+            });
             const data = await response.json();
+
+            console.log("Datos de servicios recibidos:", data);
 
             if (data.type === "SUCCESS" && Array.isArray(data.result)) {
                 tableBody.innerHTML = "";
@@ -78,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             <td>${servicio.descripcion}</td>
                             <td>${servicio.categoria.nombre}</td>
                             <td>
-                                <button id="botonStatus"" class="btn btn-sm ${servicio.status ? 'btn-success' : 'btn-danger'} cambiarEstado"
+                                <button class="btn btn-sm ${servicio.status ? 'btn-success' : 'btn-danger'} cambiarEstado"
                                         data-id="${servicio.id}" 
                                         data-status="${servicio.status}" 
                                         data-toggle="modal" 
@@ -114,8 +112,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector("#formRegistrarServicio").addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const nombre = document.querySelector("#nombre").value.trim();
-        const descripcion = document.querySelector("#descripcion").value.trim();
+        const nombre = document.querySelector("#nombreser").value.trim();
+const descripcion = document.querySelector("#descripcionser").value.trim();
         const categoriaId = categoriaSelect.value;
 
         if (nombre && descripcion && categoriaId) {
@@ -128,7 +126,10 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 const response = await fetch(`${API_URL_SERVICIOS}/save`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
+                    },
                     body: JSON.stringify(payload),
                 });
 
@@ -167,7 +168,10 @@ document.addEventListener('DOMContentLoaded', function () {
             try {
                 const response = await fetch(`${API_URL_SERVICIOS}/actualizar`, {
                     method: "PUT",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
+                    },
                     body: JSON.stringify(payload),
                 });
 
@@ -188,22 +192,25 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para cambiar el estado de un servicio
     document.querySelector("#formModificarEstado").addEventListener("submit", async (event) => {
         event.preventDefault();
-    
+
         const id = document.querySelector("#idServicio").value;
         const status = document.querySelector("#estadoServicio").value === "Activo";
-    
+
         try {
             const payload = {
                 id: parseInt(id),
                 status: !status, // Cambiar el estado al contrario
             };
-    
+
             const response = await fetch(`${API_URL_SERVICIOS}/status`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
+                },
                 body: JSON.stringify(payload),
             });
-    
+
             if (response.ok) {
                 $("#modificarEstadoServicio").modal("hide");
                 mostrarServicios(); // Recargar la tabla
@@ -214,9 +221,9 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error("Error en la solicitud:", error);
         }
     });
-    
 
     // Función para agregar eventos a los botones
+
     function agregarEventos() {
         const btnsModificar = document.querySelectorAll(".btnIcono");
         btnsModificar.forEach((btn) => {
@@ -234,17 +241,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         const btnsEstado = document.querySelectorAll(".cambiarEstado");
-btnsEstado.forEach((btn) => {
-    btn.addEventListener("click", function () {
-        const id = this.getAttribute("data-id");
-        const status = this.getAttribute("data-status") === "true";
+        btnsEstado.forEach((btn) => {
+            btn.addEventListener("click", function () {
+                const id = this.getAttribute("data-id");
+                const status = this.getAttribute("data-status") === "true";
 
-        // Rellenar los campos ocultos del modal
-        document.querySelector("#idServicio").value = id;
-        document.querySelector("#estadoServicio").value = status ? "Activo" : "Inactivo";
-    });
-});
-
+                // Rellenar los campos ocultos del modal
+                document.querySelector("#idServicio").value = id;
+                document.querySelector("#estadoServicio").value = status ? "Activo" : "Inactivo";
+            });
+        });
     }
 
     // Inicializar la página
