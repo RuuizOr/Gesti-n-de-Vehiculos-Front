@@ -1,11 +1,30 @@
+// Mostrar alerta personalizada
+function mostrarAlerta(mensaje, tipo = 'info') {
+    const alerta = document.createElement('div');
+    alerta.classList.add('alerta', tipo === 'error' ? 'bg-danger' : 'bg-success', 'mostrar');
+
+    alerta.innerHTML = `
+        <span class="texto">${mensaje}</span>
+        <button class="btn-cerrar" onclick="this.parentElement.classList.remove('mostrar')">
+            <i class="fa fa-times"></i>
+        </button>
+    `;
+
+    document.body.appendChild(alerta);
+
+    // Ocultar automáticamente la alerta después de 5 segundos
+    setTimeout(() => {
+        alerta.classList.remove('mostrar');
+        setTimeout(() => alerta.remove(), 500); // Eliminar del DOM después de la transición
+    }, 5000);
+}
+
+// Configuración del modal para modificar usuario
 $('#modificarUsuario').on('show.bs.modal', function (event) {
     const button = $(event.relatedTarget); // Botón que activó el modal
 
     // Capturar los datos del botón
     const id = button.data('id') || '';
-    console.log('data')
-    console.log(button)
-    console.log(button.data('contrasena'))
     const nombre = button.data('nombre') || '';
     const apellidos = button.data('apellidos') || '';
     const email = button.data('correo') || '';
@@ -23,7 +42,6 @@ $('#modificarUsuario').on('show.bs.modal', function (event) {
     $('#rolMod').val(rol);
 });
 
-
 // Función para editar un usuario
 async function editarUsuario(event) {
     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
@@ -31,7 +49,7 @@ async function editarUsuario(event) {
     // Obtener el token JWT desde localStorage
     const token = localStorage.getItem('jwt');
     if (!token) {
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarAlerta('No se encontró el token. Por favor, inicie sesión.', 'error');
         return;
     }
 
@@ -73,7 +91,7 @@ async function editarUsuario(event) {
 
         if (response.ok) {
             const data = await response.json();
-            alert('Usuario actualizado exitosamente');
+            mostrarAlerta('Usuario actualizado exitosamente', 'success');
             // Opcional: cerrar el modal y limpiar el formulario
             $('#modificarUsuario').modal('hide');
             document.getElementById('formModificarUsuario').reset();
@@ -81,10 +99,10 @@ async function editarUsuario(event) {
             obtenerUsuarios();
         } else {
             const errorData = await response.json();
-            alert('Error al actualizar el usuario: ' + (errorData.message || 'Verifique los datos ingresados'));
+            mostrarAlerta('Error al actualizar el usuario: ' + (errorData.message || 'Verifique los datos ingresados'), 'error');
         }
     } catch (error) {
-        alert('Ocurrió un error al intentar actualizar el usuario.');
+        mostrarAlerta('Ocurrió un error al intentar actualizar el usuario.', 'error');
     }
 }
 

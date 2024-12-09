@@ -19,7 +19,7 @@ $('#formModificarEstado').on('submit', async function (e) {
     // Token JWT desde localStorage
     const token = localStorage.getItem('jwt');
     if (!token) {
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarAlerta('No se encontró el token. Por favor, inicie sesión.', 'error');
         return;
     }
 
@@ -44,9 +44,9 @@ $('#formModificarEstado').on('submit', async function (e) {
         // Recargar los datos de los usuarios
         await obtenerUsuarios();
         $('#modificarEstadoServicio').modal('hide'); // Cerrar el modal
-        alert('Estado actualizado correctamente.');
+        mostrarAlerta('Estado actualizado correctamente.', 'success');
     } catch (error) {
         console.error('Error al intentar cambiar el estado:', error);
-        alert('Ocurrió un error al intentar cambiar el estado del usuario.');
+        mostrarAlerta('Ocurrió un error al intentar cambiar el estado del usuario.', 'error');
     }
 });

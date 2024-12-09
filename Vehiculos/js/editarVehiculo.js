@@ -1,3 +1,26 @@
+// Función para mostrar una alerta personalizada
+function mostrarAlerta(tipo, mensaje) {
+    const alerta = document.createElement('div');
+    alerta.classList.add('alerta', 'mostrar');
+
+    const icono = tipo === 'success' ? '<i class="fas fa-check-circle icono"></i>' : '<i class="fas fa-times-circle icono"></i>';
+    const claseColor = tipo === 'success' ? 'bg-success' : 'bg-danger';
+    alerta.classList.add(claseColor);
+
+    alerta.innerHTML = `${icono}<span class="texto">${mensaje}</span><button class="btn-cerrar"><i class="fa fa-times"></i></button>`;
+    document.body.appendChild(alerta);
+
+    // Después de 3 segundos, ocultamos la alerta
+    setTimeout(() => {
+        alerta.classList.remove('mostrar');
+        alerta.classList.add('ocultar');
+        // Remover la alerta después de la animación
+        setTimeout(() => {
+            alerta.remove();
+        }, 500);
+    }, 3000);
+}
+
 // Función para editar un vehículo
 async function editarVehiculo(event) {
     event.preventDefault();
@@ -6,7 +29,7 @@ async function editarVehiculo(event) {
     const token = localStorage.getItem('jwt');
 
     if (!token) {
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarAlerta('error', 'No se encontró el token. Por favor, inicie sesión.');
         return;
     }
 
@@ -16,7 +39,7 @@ async function editarVehiculo(event) {
     const color = document.getElementById("colorMod").value.trim();
 
     if (!id || !modelo || !marca || !color) {
-        alert('Por favor, complete todos los campos.');
+        mostrarAlerta('error', 'Por favor, complete todos los campos.');
         return;
     }
 
@@ -31,14 +54,15 @@ async function editarVehiculo(event) {
         });
 
         if (response.ok) {
-            alert('Vehículo modificado exitosamente');
+            mostrarAlerta('success', 'Vehículo modificado exitosamente');
             $('#modificarVehiculo').modal('hide');
             cargarVehiculos(); // Recargar la tabla
         } else {
-            alert('Error al modificar el vehículo.');
+            mostrarAlerta('error', 'Error al modificar el vehículo.');
         }
     } catch (error) {
         console.error('Error al modificar el vehículo:', error);
+        mostrarAlerta('error', 'Hubo un error al procesar la solicitud.');
     }
 }
 

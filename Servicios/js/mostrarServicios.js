@@ -14,8 +14,29 @@ document.addEventListener('DOMContentLoaded', function () {
     // Verificar si el token existe
     if (!token) {
         console.log('No se encontró el token en el localStorage');
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarAlerta('No se encontró el token. Por favor, inicie sesión.', 'error');
         return;
+    }
+
+    // Función para mostrar alertas personalizadas
+    function mostrarAlerta(mensaje, tipo = 'info') {
+        const alerta = document.createElement('div');
+        alerta.classList.add('alerta', tipo === 'error' ? 'bg-danger' : 'bg-success', 'mostrar');
+
+        alerta.innerHTML = `
+            <span class="texto">${mensaje}</span>
+            <button class="btn-cerrar" onclick="this.parentElement.classList.remove('mostrar')">
+                <i class="fa fa-times"></i>
+            </button>
+        `;
+
+        document.body.appendChild(alerta);
+
+        // Ocultar automáticamente la alerta después de 5 segundos
+        setTimeout(() => {
+            alerta.classList.remove('mostrar');
+            setTimeout(() => alerta.remove(), 500); // Eliminar del DOM después de la transición
+        }, 5000);
     }
 
     // Función para cargar las categorías y llenar el <select> de registro y modificación
@@ -23,9 +44,9 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const response = await fetch(`${API_URL_CATEGORIAS}`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
-                    'Accept': 'application/json',         // Aceptar respuesta en formato JSON
-                    'Content-Type': 'application/json'    // Especificar que enviamos/recibimos JSON
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                 }
             });
             const data = await response.json();
@@ -41,14 +62,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     option.value = categoria.id;
                     option.textContent = categoria.nombre;
 
-                    // Agregar categorías a ambos selects
                     categoriaSelect.appendChild(option);
                     categoriaSelectMod.appendChild(option.cloneNode(true));
                 });
             } else {
-                console.error("No se encontraron categorías.");
+                mostrarAlerta("No se encontraron categorías.", 'error');
             }
         } catch (error) {
+            mostrarAlerta("Error al cargar las categorías.", 'error');
             console.error("Error al cargar las categorías:", error);
         }
     }
@@ -58,9 +79,9 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const response = await fetch(`${API_URL_SERVICIOS}/all`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
-                    'Accept': 'application/json',         // Aceptar respuesta en formato JSON
-                    'Content-Type': 'application/json'    // Especificar que enviamos/recibimos JSON
+                    'Authorization': `Bearer ${token}`,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                 }
             });
             const data = await response.json();
@@ -99,15 +120,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     `;
                     tableBody.innerHTML += row;
                 });
-                agregarEventos(); // Agregar eventos a los botones
+                agregarEventos();
             } else {
-                console.error("No se encontraron servicios.");
+                mostrarAlerta("No se encontraron servicios.", 'error');
             }
         } catch (error) {
+            mostrarAlerta("Error al cargar los servicios.", 'error');
             console.error("Error al cargar los servicios:", error);
         }
     }
-
+    
     // Función para registrar un servicio
     document.querySelector("#formRegistrarServicio").addEventListener("submit", async (event) => {
         event.preventDefault();

@@ -1,3 +1,26 @@
+// Función para mostrar una alerta personalizada
+function mostrarAlerta(tipo, mensaje) {
+    const alerta = document.createElement('div');
+    alerta.classList.add('alerta', 'mostrar');
+
+    const icono = tipo === 'success' ? '<i class="fas fa-check-circle icono"></i>' : '<i class="fas fa-times-circle icono"></i>';
+    const claseColor = tipo === 'success' ? 'bg-success' : 'bg-danger';
+    alerta.classList.add(claseColor);
+
+    alerta.innerHTML = `${icono}<span class="texto">${mensaje}</span><button class="btn-cerrar"><i class="fa fa-times"></i></button>`;
+    document.body.appendChild(alerta);
+
+    // Después de 3 segundos, ocultamos la alerta
+    setTimeout(() => {
+        alerta.classList.remove('mostrar');
+        alerta.classList.add('ocultar');
+        // Remover la alerta después de la animación
+        setTimeout(() => {
+            alerta.remove();
+        }, 500);
+    }, 3000);
+}
+
 // Función para cambiar el estado de un vehículo
 async function cambiarEstadoVehiculo(event) {
     event.preventDefault();
@@ -6,14 +29,15 @@ async function cambiarEstadoVehiculo(event) {
     const token = localStorage.getItem('jwt');
 
     if (!token) {
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarAlerta('error', 'No se encontró el token. Por favor, inicie sesión.');
         return;
     }
 
     const id = document.getElementById("idServicio").value;
-    const status = document.getElementById("estadoServicio").value === "true";
+    const status = document.getElementById("estadoServicio").value === "true"; // Obtenemos el estado (activo o no activo)
 
     try {
+        // Enviar la solicitud PUT con el parámetro status en la URL
         const response = await fetch(`${API_URL}/${id}?status=${!status}`, {
             method: "PUT",
             headers: {
@@ -22,14 +46,16 @@ async function cambiarEstadoVehiculo(event) {
         });
 
         if (response.ok) {
-            alert('Estado del vehículo actualizado correctamente.');
+            mostrarAlerta('success', 'Estado del vehículo actualizado correctamente.');
             $('#modificarEstadoServicio').modal('hide');
-            cargarVehiculos(); // Recargar la tabla
+            cargarVehiculos(); // Recargar la tabla de vehículos
         } else {
-            alert('Error al actualizar el estado del vehículo.');
+            const errorData = await response.json();
+            mostrarAlerta('error', `Error al actualizar el estado: ${errorData.message || 'Intente de nuevo'}`);
         }
     } catch (error) {
         console.error('Error al cambiar el estado del vehículo:', error);
+        mostrarAlerta('error', 'Ocurrió un error al intentar cambiar el estado del vehículo.');
     }
 }
 

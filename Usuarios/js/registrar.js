@@ -9,7 +9,7 @@ async function registrarUsuario(event) {
     // Verificar si el token existe
     if (!token) {
         console.log('No se encontró el token en el localStorage');
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarAlerta('No se encontró el token. Por favor, inicie sesión.', 'error');
         return;
     }
 
@@ -51,7 +51,7 @@ async function registrarUsuario(event) {
         if (response.ok) {
             const data = await response.json();
             console.log('Usuario registrado exitosamente:', data);
-            alert('Usuario registrado exitosamente');
+            mostrarAlerta('Usuario registrado exitosamente.', 'success');
             // Opcional: cerrar el modal y limpiar el formulario
             $('#registrarUsuario').modal('hide');
             document.getElementById('formRegistrarUsuario').reset();
@@ -60,11 +60,11 @@ async function registrarUsuario(event) {
         } else {
             const errorData = await response.json();
             console.error('Error al registrar el usuario:', errorData);
-            alert('Error al registrar el usuario: ' + errorData.message || 'Verifique los datos ingresados');
+            mostrarAlerta('Error al registrar el usuario: ' + (errorData.message || 'Verifique los datos ingresados'), 'error');
         }
     } catch (error) {
         console.error('Hubo un problema con la solicitud:', error);
-        alert('Ocurrió un error al intentar registrar el usuario.');
+        mostrarAlerta('Ocurrió un error al intentar registrar el usuario.', 'error');
     }
 }
 

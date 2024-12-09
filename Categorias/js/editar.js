@@ -19,7 +19,7 @@ async function actualizarCategoria(event) {
     // Obtener el token JWT desde localStorage
     const token = localStorage.getItem('jwt');
     if (!token) {
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarToast('No se encontró el token. Por favor, inicie sesión.', '#f44336');  // Error en rojo
         return;
     }
 
@@ -52,7 +52,7 @@ async function actualizarCategoria(event) {
 
         if (response.ok) {
             const data = await response.json();
-            alert('Categoría actualizada exitosamente');
+            mostrarToast('Categoría actualizada exitosamente', '#4caf50');  // Éxito en verde
             // Opcional: cerrar el modal y limpiar el formulario
             $('#modificarCategoria').modal('hide');
             document.getElementById('formModificarCategoria').reset();
@@ -60,12 +60,65 @@ async function actualizarCategoria(event) {
             obtenerCategorias();
         } else {
             const errorData = await response.json();
-            alert('Error al actualizar la categoría: ' + (errorData.message || 'Verifique los datos ingresados'));
+            mostrarToast('Error al actualizar la categoría: ' + (errorData.message || 'Verifique los datos ingresados'), '#f44336');  // Error en rojo
         }
     } catch (error) {
-        alert('Ocurrió un error al intentar actualizar la categoría.');
+        mostrarToast('Ocurrió un error al intentar actualizar la categoría.', '#f44336');  // Error en rojo
     }
 }
 
 // Agregar el evento al formulario
 document.getElementById('formModificarCategoria').addEventListener('submit', actualizarCategoria);
+
+// Función para mostrar el mensaje tipo toast
+function mostrarToast(mensaje, color = "#092e95") {
+    const alertaDiv = document.createElement("div");
+    alertaDiv.classList.add("alerta");
+
+    // Establecer el mensaje
+    const textoDiv = document.createElement("div");
+    textoDiv.classList.add("texto");
+    textoDiv.textContent = mensaje;
+
+    // Establecer color de fondo personalizado si se pasa un color
+    alertaDiv.style.backgroundColor = color;
+
+    // Crear el botón de cerrar
+    const btnCerrar = document.createElement("button");
+    btnCerrar.classList.add("btn-cerrar");
+    btnCerrar.innerHTML = '&times;';
+    btnCerrar.addEventListener("click", () => {
+        alertaDiv.classList.remove("mostrar");
+        alertaDiv.classList.add("ocultar");
+        setTimeout(() => {
+            alertaDiv.remove();
+        }, 500); // Retirar el div después de la animación
+    });
+
+    // Crear icono (opcional, si lo deseas)
+    const iconoDiv = document.createElement("div");
+    iconoDiv.classList.add("icono");
+    iconoDiv.innerHTML = "&#x1F4A1;"; // Icono de bombilla
+
+    // Agregar los elementos a la alerta
+    alertaDiv.appendChild(iconoDiv);
+    alertaDiv.appendChild(textoDiv);
+    alertaDiv.appendChild(btnCerrar);
+
+    // Añadir la alerta al body
+    document.body.appendChild(alertaDiv);
+
+    // Mostrar la alerta con la clase de animación
+    setTimeout(() => {
+        alertaDiv.classList.add("mostrar");
+    }, 10); // Espera un poco antes de iniciar la animación
+
+    // Ocultar la alerta después de 3 segundos
+    setTimeout(() => {
+        alertaDiv.classList.remove("mostrar");
+        alertaDiv.classList.add("ocultar");
+        setTimeout(() => {
+            alertaDiv.remove();
+        }, 500); // Eliminar el div después de la animación
+    }, 3000); // Duración de la alerta
+}

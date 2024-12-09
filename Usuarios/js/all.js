@@ -1,3 +1,24 @@
+// Función para mostrar alertas personalizadas
+function mostrarAlerta(mensaje, tipo = 'info') {
+    const alerta = document.createElement('div');
+    alerta.classList.add('alerta', tipo === 'error' ? 'bg-danger' : 'bg-success', 'mostrar');
+
+    alerta.innerHTML = `
+        <span class="texto">${mensaje}</span>
+        <button class="btn-cerrar" onclick="this.parentElement.classList.remove('mostrar')">
+            <i class="fa fa-times"></i>
+        </button>
+    `;
+
+    document.body.appendChild(alerta);
+
+    // Ocultar automáticamente la alerta después de 5 segundos
+    setTimeout(() => {
+        alerta.classList.remove('mostrar');
+        setTimeout(() => alerta.remove(), 500); // Eliminar del DOM después de la transición
+    }, 5000);
+}
+
 // Función para obtener y mostrar los usuarios
 async function obtenerUsuarios() {
     // Obtener el token JWT desde localStorage
@@ -7,20 +28,20 @@ async function obtenerUsuarios() {
     // Verificar si el token existe
     if (!token) {
         console.log('No se encontró el token en el localStorage');
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarAlerta('No se encontró el token. Por favor, inicie sesión.', 'error');
         return;
     }
 
-    const url = 'http://localhost:8080/usuarios/all';  // URL de la API
+    const url = 'http://localhost:8080/usuarios/all'; // URL de la API
 
     try {
         // Realizar la solicitud GET con el token en el encabezado
         const response = await fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`, // Incluir el token en el encabezado
-                'Accept': 'application/json',         // Aceptar respuesta en formato JSON
-                'Content-Type': 'application/json'    // Especificar que enviamos/recibimos JSON
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             }
         });
 
@@ -37,15 +58,15 @@ async function obtenerUsuarios() {
         const usuariosTableBody = document.getElementById('usuariosTableBody');
         usuariosTableBody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
         let rol;
-        
+
         // Iterar sobre los datos de los usuarios y crear filas dinámicamente
         data.result.forEach(usuario => {
-            if(usuario.admin ==="ROLE_USER"){
-                rol = "Usuario"
-            }else if(usuario.admin ==="ROLE_ADMIN"){
-                rol = "Administrador"
+            if (usuario.admin === "ROLE_USER") {
+                rol = "Usuario";
+            } else if (usuario.admin === "ROLE_ADMIN") {
+                rol = "Administrador";
             }
-            
+
             const row = `
                 <tr align="center">
                     <td>${usuario.nombre}</td>
@@ -69,7 +90,7 @@ async function obtenerUsuarios() {
                             data-correo="${usuario.email}"  
                             data-telefono="${usuario.telefono}" 
                             data-contrasena="${usuario.contraseña}" 
-                            data-rol="${usuario.admin ==="ROLE_ADMIN" ? 'admin': 'usuario'}" 
+                            data-rol="${usuario.admin === "ROLE_ADMIN" ? 'admin' : 'usuario'}" 
                             data-estado="${usuario.status}" 
                             data-toggle="modal" 
                             data-target="#modificarUsuario">
@@ -84,7 +105,7 @@ async function obtenerUsuarios() {
     } catch (error) {
         // Manejar errores de la solicitud
         console.error('Hubo un problema con la solicitud:', error);
-        alert('Ocurrió un error al intentar obtener los datos de los usuarios.');
+        mostrarAlerta('Ocurrió un error al intentar obtener los datos de los usuarios.', 'error');
     }
 }
 

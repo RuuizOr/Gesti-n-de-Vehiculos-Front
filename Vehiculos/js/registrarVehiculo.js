@@ -1,3 +1,26 @@
+// Función para mostrar una alerta personalizada
+function mostrarAlerta(tipo, mensaje) {
+    const alerta = document.createElement('div');
+    alerta.classList.add('alerta', 'mostrar');
+
+    const icono = tipo === 'success' ? '<i class="fas fa-check-circle icono"></i>' : '<i class="fas fa-times-circle icono"></i>';
+    const claseColor = tipo === 'success' ? 'bg-success' : 'bg-danger';
+    alerta.classList.add(claseColor);
+
+    alerta.innerHTML = `${icono}<span class="texto">${mensaje}</span><button class="btn-cerrar"><i class="fa fa-times"></i></button>`;
+    document.body.appendChild(alerta);
+
+    // Después de 3 segundos, ocultamos la alerta
+    setTimeout(() => {
+        alerta.classList.remove('mostrar');
+        alerta.classList.add('ocultar');
+        // Remover la alerta después de la animación
+        setTimeout(() => {
+            alerta.remove();
+        }, 500);
+    }, 3000);
+}
+
 // Función para registrar un vehículo
 async function registrarVehiculo(event) {
     event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
@@ -9,7 +32,7 @@ async function registrarVehiculo(event) {
     // Verificar si el token existe
     if (!token) {
         console.log('No se encontró el token en el localStorage');
-        alert('No se encontró el token. Por favor, inicie sesión.');
+        mostrarAlerta('error', 'No se encontró el token. Por favor, inicie sesión.');
         return;
     }
 
@@ -23,7 +46,7 @@ async function registrarVehiculo(event) {
 
     // Validar que los campos no estén vacíos
     if (!modelo || !marca || !color) {
-        alert('Por favor, complete todos los campos del formulario.');
+        mostrarAlerta('error', 'Por favor, complete todos los campos del formulario.');
         return;
     }
 
@@ -51,7 +74,7 @@ async function registrarVehiculo(event) {
         if (response.ok) {
             const data = await response.json();
             console.log('Vehículo registrado exitosamente:', data);
-            alert('Vehículo registrado exitosamente');
+            mostrarAlerta('success', 'Vehículo registrado exitosamente');
             // Opcional: cerrar el modal y limpiar el formulario
             $('#registrarVehiculo').modal('hide');
             document.getElementById('formRegistrarVehiculo').reset();
@@ -62,11 +85,11 @@ async function registrarVehiculo(event) {
         } else {
             const errorData = await response.json();
             console.error('Error al registrar el vehículo:', errorData);
-            alert('Error al registrar el vehículo: ' + errorData.message || 'Verifique los datos ingresados');
+            mostrarAlerta('error', `Error al registrar el vehículo: ${errorData.message || 'Verifique los datos ingresados'}`);
         }
     } catch (error) {
         console.error('Hubo un problema con la solicitud:', error);
-        alert('Ocurrió un error al intentar registrar el vehículo.');
+        mostrarAlerta('error', 'Ocurrió un error al intentar registrar el vehículo.');
     }
 }
 
