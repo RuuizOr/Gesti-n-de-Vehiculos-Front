@@ -34,7 +34,7 @@ function login() {
             localStorage.setItem('admin', data.result.admin);
             localStorage.setItem('expiration', data.result.expiration);
 
-            mostrarToast('Inicio de sesión exitoso', '#4caf50');
+            mostrarToast('Inicio de sesión exitoso', '#092e95');
 
             // Verificar el rol del usuario y redirigir según corresponda
             if (data.result.admin === 'ROLE_ADMIN') {
@@ -43,12 +43,12 @@ function login() {
                 window.location.href = '../../InicioUsuarioNormal/InicioUsuarioNormal.html';
             }
         } else {
-            mostrarToast('Credenciales incorrectas', '#f44336');
+            mostrarToast('Credenciales incorrectas', '#092e95');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        mostrarToast('Correo o Contraseña no válida', '#f44336');
+        mostrarToast('Correo o Contraseña no válida', '#092e95');
     });
 }
 
@@ -71,7 +71,7 @@ function mostrarToast(mensaje, color = "#092e95") {
 
     const iconoDiv = document.createElement("div");
     iconoDiv.classList.add("icono");
-    iconoDiv.innerHTML = "&#x1F4A1;";
+    iconoDiv.innerHTML = "&#x1f698;";
 
     alertaDiv.appendChild(iconoDiv);
     alertaDiv.appendChild(textoDiv);
