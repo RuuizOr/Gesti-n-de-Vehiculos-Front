@@ -275,7 +275,46 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
         });
     }
 
+    // Función para filtrar los usuarios
+function filtrarUsuarios() {
+    const nombre = document.getElementById('filterName').value.toLowerCase();
+    const estado = document.getElementById('filterState').value;
+
+    // Obtener todas las filas de la tabla
+    const filas = document.querySelectorAll('#serviciosTableBody tr');
+
+    // Iterar sobre todas las filas
+    filas.forEach(fila => {
+        const nombreUsuario = fila.cells[0].textContent.toLowerCase();
+        // Obtener el estado desde el botón dentro de la fila
+        const estadoBoton = fila.querySelector('button').getAttribute('data-status'); // Obtener el estado del botón
+
+        // Comprobar si la fila cumple con los filtros
+        const coincideNombre = nombreUsuario.includes(nombre);
+
+        let coincideEstado = true; // Si no se selecciona estado, coincide siempre
+        if (estado) {
+            // Compara si el estado seleccionado corresponde con el estado del usuario
+            coincideEstado = (estado === 'Activo' && estadoBoton === 'true') ||
+                 (estado === 'NoActivo' && estadoBoton === 'false');
+
+        }
+
+        // Mostrar u ocultar la fila según los filtros
+        if (coincideNombre && coincideEstado) {
+            fila.style.display = ''; // Mostrar la fila
+        } else {
+            fila.style.display = 'none'; // Ocultar la fila
+        }
+    });
+}
+
+// Agregar eventos a los filtros
+document.getElementById('filterName').addEventListener('input', filtrarUsuarios);
+document.getElementById('filterState').addEventListener('change', filtrarUsuarios);
+
     // Inicializar la página
     cargarCategorias();
     mostrarServicios();
 });
+

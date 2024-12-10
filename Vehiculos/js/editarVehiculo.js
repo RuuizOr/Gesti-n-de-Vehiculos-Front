@@ -1,3 +1,9 @@
+$('.modal').on('hidden.bs.modal', function () {
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+});
+
+
 // Función para mostrar una alerta personalizada
 function mostrarAlerta(tipo, mensaje) {
     const alerta = document.createElement('div');

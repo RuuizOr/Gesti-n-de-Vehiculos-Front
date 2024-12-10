@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehiculos</title>
+    <title>Vehículos</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="../Vehiculos/img/carros.png">
@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="css/estilosModal.css">
     <link rel="stylesheet" href="css/estilosTabla.css">
     <link rel="stylesheet" href="css/alertas.css">
-
     <script src="https://kit.fontawesome.com/8f2cb0ebcf.js" crossorigin="anonymous"></script>
 </head>
 
@@ -30,35 +29,30 @@
                         <i class="fa-solid fa-house"></i>
                         <span>Inicio</span>
                     </a>
-                    <div class="tooltip">Inicio</div>
                 </li>
                 <li class="sidebar-item">
                     <a href="../Usuarios/Usuarios.html" class="sidebar-link">
                         <i class="fa-solid fa-user"></i>
                         <span>Usuarios</span>
                     </a>
-                    <div class="tooltip">Usuarios</div>
                 </li>
                 <li class="sidebar-item">
                     <a href="../Categorias/Categorias.html" class="sidebar-link">
                         <i class="fa-solid fa-tag"></i>
                         <span>Categorías</span>
                     </a>
-                    <div class="tooltip">Categorías</div>
                 </li>
                 <li class="sidebar-item">
                     <a href="../Servicios/Servicios.html" class="sidebar-link">
                         <i class="fa-solid fa-toolbox"></i>
                         <span>Servicios</span>
                     </a>
-                    <div class="tooltip">Servicios</div>
                 </li>
                 <li class="sidebar-item">
                     <a href="../Vehiculos/Vehiculos.html" class="sidebar-link">
                         <i class="fa-solid fa-car"></i>
                         <span>Vehículos</span>
                     </a>
-                    <div class="tooltip">Vehículos</div>
                 </li>
             </ul>
             <div class="sidebar-footer background-color" title="Salir">
@@ -66,14 +60,11 @@
                     <i class="fas fa-right-from-bracket"></i>
                     <span>Salir</span>
                 </a>
-                <div class="tooltip">Salir</div>
             </div>            
         </aside>
 
         <!-- Cuerpo de la página -->
         <div class="main">
-
-            <!-- Video de fondo en la clase main -->
             <video id="videoBackground" autoplay muted loop>
                 <source src="img/fondoo2.mp4" type="video/mp4">
             </video>
@@ -96,7 +87,7 @@
                     <div class="col-md-3">
                         <button type="button" class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarVehiculo" style="display: flex; justify-content: space-evenly; align-items: center">
                             Registrar vehículo <i class="fa-solid fa-chalkboard-user"></i>
-                        </button>                        
+                        </button>
                     </div>
                 </div>
 
@@ -108,52 +99,19 @@
                                 <th>Modelo</th>
                                 <th>Marca</th>
                                 <th>Color</th>
-                                <!--<th>Servicio</th>-->
                                 <th>Estado</th>
                                 <th>Editar</th>
                             </tr>
                         </thead>
-                        <tbody id="vehiculosTableBody">
-                            <!-- Aquí se llenarán dinámicamente las filas -->
-                        </tbody>
+                        <tbody id="vehiculosTableBody"></tbody>
                     </table>
                 </div>
-                
             </div>
         </div>
     </div>
 
-
-    
-    <div class="modal fade" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog custom-modal-dialog" role="document">
-        <div class="modal-content custom-modal-content">
-            <div class="modal-header custom-modal-header">
-                <h5 class="modal-title custom-modal-title">Actualizar Estado</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body custom-modal-body">
-                <form id="formModificarEstado">
-                    <input id="idServicio" name="idServicio" type="hidden">
-                    <input id="estadoServicio" name="estadoServicio" type="hidden">
-                    <h6>¿Estás seguro de actualizar el estado?</h6>
-                    <div class="modal-footer custom-modal-footer">
-                        <button type="submit" class="btn btn-primary">Actualizar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-    <div class="modal fade" id="registrarVehiculo" tabindex="-1" role="dialog" aria-labelledby="registrarVehiculoLabel" aria-hidden="true">
+    <!-- Modal de registro -->
+    <div class="modal" id="registrarVehiculo" tabindex="-1" role="dialog" aria-labelledby="registrarVehiculoLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -165,16 +123,16 @@
                 <div class="modal-body">
                     <form id="formRegistrarVehiculo">
                         <div class="form-group">
-                            <label for="modelo">Modelo:</label>
-                            <input type="text" class="form-control" id="modelo" required>
+                            <input type="text" class="form-control" id="modelo" name="modelo" maxlength="50" placeholder=" " required>
+                            <label for="modelo" class="col-form-label">Modelo:</label>
                         </div>
                         <div class="form-group">
-                            <label for="marca">Marca:</label>
-                            <input type="text" class="form-control" id="marca" required>
+                            <input type="text" class="form-control" id="marca" name="marca" maxlength="50" placeholder=" " required>
+                            <label for="marca" class="col-form-label">Marca:</label>
                         </div>
                         <div class="form-group">
-                            <label for="color">Color:</label>
-                            <input type="text" class="form-control" id="color" required>
+                            <input type="text" class="form-control" id="color" name="color" maxlength="50" placeholder=" " required>
+                            <label for="color" class="col-form-label">Color:</label>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -186,7 +144,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modificarVehiculo" tabindex="-1" role="dialog" aria-labelledby="modificarVehiculoLabel" aria-hidden="true">
+    <!-- Modal de modificar vehículo -->
+    <div class="modal" id="modificarVehiculo" tabindex="-1" role="dialog" aria-labelledby="modificarVehiculoLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -219,19 +178,37 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de cambio de estado -->
+    <div class="modal fade" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel" aria-hidden="true">
+        <div class="modal-dialog custom-modal-dialog" role="document">
+            <div class="modal-content custom-modal-content">
+                <div class="modal-header custom-modal-header">
+                    <h5 class="modal-title custom-modal-title">Actualizar Estado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body custom-modal-body">
+                    <form id="formModificarEstado">
+                        <input id="idServicio" name="idServicio" type="hidden">
+                        <input id="estadoServicio" name="estadoServicio" type="hidden">
+                        <h6>¿Estás seguro de actualizar el estado?</h6>
+                        <div class="modal-footer custom-modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     
 
-
-
-<!-- Scripts utilizados -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="js/mostrarVehiculos.js"></script>
-<script src="js/registrarVehiculo.js"></script>
-<script src="js/editarVehiculo.js"></script>
-<script src="js/cambiarEstadoVehiculo.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Scripts utilizados -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="js/vehiculos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
