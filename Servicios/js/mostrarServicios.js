@@ -158,6 +158,7 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
                 if (response.ok) {
                     document.querySelector("#formRegistrarServicio").reset();
                     $("#registrarServicio").modal("hide");
+                    mostrarAlerta("Servicio registrado exitosamente.", 'error');
                     mostrarServicios();
                 } else {
                     console.error("Error al registrar el servicio.");
@@ -199,6 +200,7 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
 
                 if (response.ok) {
                     $("#modificarServicio").modal("hide");
+                    mostrarAlerta("Servicio actualizado exitosamente.", 'error');
                     mostrarServicios();
                 } else {
                     console.error("Error al modificar el servicio.");
@@ -235,6 +237,7 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
 
             if (response.ok) {
                 $("#modificarEstadoServicio").modal("hide");
+                mostrarAlerta("Servicio actualizado correctamente.", 'error');
                 mostrarServicios(); // Recargar la tabla
             } else {
                 console.error("Error al actualizar el estado del servicio.");

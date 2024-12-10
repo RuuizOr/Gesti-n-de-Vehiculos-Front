@@ -81,8 +81,6 @@ async function obtenerCategorias() {
             tableBody.innerHTML += row;
         });
 
-        // Mostrar mensaje de éxito
-
         // Configurar los filtros
         configurarFiltros();
 
