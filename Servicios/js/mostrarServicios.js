@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () { 
     // URLs de la API
     const API_URL_SERVICIOS = "http://localhost:8080/servicios";
     const API_URL_CATEGORIAS = "http://localhost:8080/CategoriasDeServicios/all";
@@ -19,25 +19,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Función para mostrar alertas personalizadas
-    function mostrarAlerta(mensaje, tipo = 'info') {
-        const alerta = document.createElement('div');
-        alerta.classList.add('alerta', tipo === 'error' ? 'bg-danger' : 'bg-success', 'mostrar');
+    // Función para mostrar alertas personalizadas
+function mostrarAlerta(mensaje, tipo = 'info') {
+    const alerta = document.createElement('div');
+    
+    // Aseguramos que el tipo de alerta sea 'success' o 'error'
+    alerta.classList.add('alerta', tipo === 'error' ? 'bg-primary' : 'bg-info', 'mostrar');
+    
+    // Icono de acuerdo al tipo de alerta (error o éxito)
+    const icono = tipo === 'success' ? '&#x1f698;' : '&#x1f698;'; // Icono de vehículo
+    
+    alerta.innerHTML = ` 
+        <span class="icono-alerta">${icono}</span>
+        <span class="texto">${mensaje}</span>
+        <button class="btn-cerrar" onclick="this.parentElement.classList.remove('mostrar')">
+            <i class="fa fa-times"></i>
+        </button>
+    `;
+    
+    document.body.appendChild(alerta);
+    
+    // Ocultar automáticamente la alerta después de 5 segundos
+    setTimeout(() => {
+        alerta.classList.remove('mostrar');
+        setTimeout(() => alerta.remove(), 500); // Eliminar del DOM después de la transición
+    }, 5000);
+}
 
-        alerta.innerHTML = `
-            <span class="texto">${mensaje}</span>
-            <button class="btn-cerrar" onclick="this.parentElement.classList.remove('mostrar')">
-                <i class="fa fa-times"></i>
-            </button>
-        `;
-
-        document.body.appendChild(alerta);
-
-        // Ocultar automáticamente la alerta después de 5 segundos
-        setTimeout(() => {
-            alerta.classList.remove('mostrar');
-            setTimeout(() => alerta.remove(), 500); // Eliminar del DOM después de la transición
-        }, 5000);
-    }
+    
 
     // Función para cargar las categorías y llenar el <select> de registro y modificación
     async function cargarCategorias() {
@@ -135,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
 
         const nombre = document.querySelector("#nombreser").value.trim();
-const descripcion = document.querySelector("#descripcionser").value.trim();
+        const descripcion = document.querySelector("#descripcionser").value.trim();
         const categoriaId = categoriaSelect.value;
 
         if (nombre && descripcion && categoriaId) {
@@ -159,14 +168,16 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
                     document.querySelector("#formRegistrarServicio").reset();
                     $("#registrarServicio").modal("hide");
                     mostrarServicios();
+                    mostrarAlerta("Servicio registrado exitosamente.", 'success');
                 } else {
-                    console.error("Error al registrar el servicio.");
+                    mostrarAlerta("Error al registrar el servicio.", 'error');
                 }
             } catch (error) {
+                mostrarAlerta("Error en la solicitud.", 'error');
                 console.error("Error en la solicitud:", error);
             }
         } else {
-            console.error("Por favor, completa todos los campos.");
+            mostrarAlerta("Por favor, completa todos los campos.", 'error');
         }
     });
 
@@ -200,14 +211,16 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
                 if (response.ok) {
                     $("#modificarServicio").modal("hide");
                     mostrarServicios();
+                    mostrarAlerta("Servicio actualizado exitosamente.", 'success');
                 } else {
-                    console.error("Error al modificar el servicio.");
+                    mostrarAlerta("Error al modificar el servicio.", 'error');
                 }
             } catch (error) {
+                mostrarAlerta("Error en la solicitud.", 'error');
                 console.error("Error en la solicitud:", error);
             }
         } else {
-            console.error("Por favor, completa todos los campos.");
+            mostrarAlerta("Por favor, completa todos los campos.", 'error');
         }
     });
 
@@ -236,16 +249,17 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
             if (response.ok) {
                 $("#modificarEstadoServicio").modal("hide");
                 mostrarServicios(); // Recargar la tabla
+                mostrarAlerta("Estado actualizado exitosamente.", 'success');
             } else {
-                console.error("Error al actualizar el estado del servicio.");
+                mostrarAlerta("Error al actualizar el estado.", 'error');
             }
         } catch (error) {
+            mostrarAlerta("Error en la solicitud.", 'error');
             console.error("Error en la solicitud:", error);
         }
     });
 
     // Función para agregar eventos a los botones
-
     function agregarEventos() {
         const btnsModificar = document.querySelectorAll(".btnIcono");
         btnsModificar.forEach((btn) => {
@@ -276,42 +290,42 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
     }
 
     // Función para filtrar los usuarios
-function filtrarUsuarios() {
-    const nombre = document.getElementById('filterName').value.toLowerCase();
-    const estado = document.getElementById('filterState').value;
+    function filtrarUsuarios() {
+        const nombre = document.getElementById('filterName').value.toLowerCase();
+        const estado = document.getElementById('filterState').value;
 
-    // Obtener todas las filas de la tabla
-    const filas = document.querySelectorAll('#serviciosTableBody tr');
+        // Obtener todas las filas de la tabla
+        const filas = document.querySelectorAll('#serviciosTableBody tr');
 
-    // Iterar sobre todas las filas
-    filas.forEach(fila => {
-        const nombreUsuario = fila.cells[0].textContent.toLowerCase();
-        // Obtener el estado desde el botón dentro de la fila
-        const estadoBoton = fila.querySelector('button').getAttribute('data-status'); // Obtener el estado del botón
+        // Iterar sobre todas las filas
+        filas.forEach(fila => {
+            const nombreUsuario = fila.cells[0].textContent.toLowerCase();
+            // Obtener el estado desde el botón dentro de la fila
+            const estadoBoton = fila.querySelector('button').getAttribute('data-status'); // Obtener el estado del botón
 
-        // Comprobar si la fila cumple con los filtros
-        const coincideNombre = nombreUsuario.includes(nombre);
+            // Comprobar si la fila cumple con los filtros
+            const coincideNombre = nombreUsuario.includes(nombre);
 
-        let coincideEstado = true; // Si no se selecciona estado, coincide siempre
-        if (estado) {
-            // Compara si el estado seleccionado corresponde con el estado del usuario
-            coincideEstado = (estado === 'Activo' && estadoBoton === 'true') ||
-                 (estado === 'NoActivo' && estadoBoton === 'false');
+            let coincideEstado = true; // Si no se selecciona estado, coincide siempre
+            if (estado) {
+                // Compara si el estado seleccionado corresponde con el estado del usuario
+                coincideEstado = (estado === 'Activo' && estadoBoton === 'true') ||
+                     (estado === 'NoActivo' && estadoBoton === 'false');
 
-        }
+            }
 
-        // Mostrar u ocultar la fila según los filtros
-        if (coincideNombre && coincideEstado) {
-            fila.style.display = ''; // Mostrar la fila
-        } else {
-            fila.style.display = 'none'; // Ocultar la fila
-        }
-    });
-}
+            // Mostrar u ocultar la fila según los filtros
+            if (coincideNombre && coincideEstado) {
+                fila.style.display = ''; // Mostrar la fila
+            } else {
+                fila.style.display = 'none'; // Ocultar la fila
+            }
+        });
+    }
 
-// Agregar eventos a los filtros
-document.getElementById('filterName').addEventListener('input', filtrarUsuarios);
-document.getElementById('filterState').addEventListener('change', filtrarUsuarios);
+    // Agregar eventos a los filtros
+    document.getElementById('filterName').addEventListener('input', filtrarUsuarios);
+    document.getElementById('filterState').addEventListener('change', filtrarUsuarios);
 
     // Inicializar la página
     cargarCategorias();
