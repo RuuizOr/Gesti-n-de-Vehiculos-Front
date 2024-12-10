@@ -162,6 +162,7 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
                     mostrarServicios();
                 } else {
                     console.error("Error al registrar el servicio.");
+                    mostrarToast('Ocurrió un error al intentar registrar el servicio.', '#f44336');  // Error en rojo
                 }
             } catch (error) {
                 console.error("Error en la solicitud:", error);
@@ -204,6 +205,7 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
                     mostrarServicios();
                 } else {
                     console.error("Error al modificar el servicio.");
+                    mostrarToast('Ocurrió un error al intentar modificar el servicio.', '#f44336');  // Error en rojo
                 }
             } catch (error) {
                 console.error("Error en la solicitud:", error);
@@ -241,6 +243,7 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
                 mostrarServicios(); // Recargar la tabla
             } else {
                 console.error("Error al actualizar el estado del servicio.");
+                mostrarToast('Ocurrió un error al intentar cambiar el estado.', '#f44336');  // Error en rojo
             }
         } catch (error) {
             console.error("Error en la solicitud:", error);
