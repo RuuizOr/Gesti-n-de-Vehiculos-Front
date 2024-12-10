@@ -13,40 +13,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Verificar si el token existe
     if (!token) {
-        console.log('No se encontró el token en el localStorage');
-        mostrarAlerta('No se encontró el token. Por favor, inicie sesión.', 'error');
+        mostrarAlerta('error', ' No se encontró el token. Por favor, inicie sesión.');
         return;
     }
 
     // Función para mostrar alertas personalizadas
-    // Función para mostrar alertas personalizadas
-function mostrarAlerta(mensaje, tipo = 'info') {
-    const alerta = document.createElement('div');
-    
-    // Aseguramos que el tipo de alerta sea 'success' o 'error'
-    alerta.classList.add('alerta', tipo === 'error' ? 'bg-primary' : 'bg-info', 'mostrar');
-    
-    // Icono de acuerdo al tipo de alerta (error o éxito)
-    const icono = tipo === 'success' ? '&#x1f698;' : '&#x1f698;'; // Icono de vehículo
-    
-    alerta.innerHTML = ` 
-        <span class="icono-alerta">${icono}</span>
-        <span class="texto">${mensaje}</span>
-        <button class="btn-cerrar" onclick="this.parentElement.classList.remove('mostrar')">
-            <i class="fa fa-times"></i>
-        </button>
-    `;
-    
-    document.body.appendChild(alerta);
-    
-    // Ocultar automáticamente la alerta después de 5 segundos
-    setTimeout(() => {
-        alerta.classList.remove('mostrar');
-        setTimeout(() => alerta.remove(), 500); // Eliminar del DOM después de la transición
-    }, 5000);
-}
+    function mostrarAlerta(mensaje, tipo) {
+        const alertaExistente = document.querySelector('.alerta');
+        if (alertaExistente) {
+            alertaExistente.classList.remove('mostrar');
+            alertaExistente.classList.add('ocultar');
+            // Esperamos que la animación de desaparición termine antes de eliminarla
+            setTimeout(() => alertaExistente.remove(), 500);
+        }
 
-    
+        const alerta = document.createElement('div');
+        alerta.classList.add('alerta', 'mostrar');
+
+        const icono = tipo === 'success' ? '&#x1f698;' : '&#x1f698;'; // Icono de vehículo
+        alerta.innerHTML = `${icono}  <span class="texto">   ${mensaje}</span><button class="btn-cerrar"><i class="fa fa-times"></i></button>`;
+        
+        document.body.appendChild(alerta);
+
+        const btnCerrar = alerta.querySelector('.btn-cerrar');
+        btnCerrar.addEventListener('click', () => {
+            alerta.classList.remove('mostrar');
+            alerta.classList.add('ocultar');
+            setTimeout(() => alerta.remove(), 500);
+        });
+
+        setTimeout(() => {
+            alerta.classList.remove('mostrar');
+            alerta.classList.add('ocultar');
+            setTimeout(() => alerta.remove(), 500);
+        }, 3000);
+    }
 
     // Función para cargar las categorías y llenar el <select> de registro y modificación
     async function cargarCategorias() {
@@ -75,10 +76,10 @@ function mostrarAlerta(mensaje, tipo = 'info') {
                     categoriaSelectMod.appendChild(option.cloneNode(true));
                 });
             } else {
-                mostrarAlerta("No se encontraron categorías.", 'error');
+                mostrarAlerta(" No se encontraron categorías.", 'error');
             }
         } catch (error) {
-            mostrarAlerta("Error al cargar las categorías.", 'error');
+            mostrarAlerta(" Error al cargar las categorías.", 'error');
             console.error("Error al cargar las categorías:", error);
         }
     }
@@ -131,10 +132,10 @@ function mostrarAlerta(mensaje, tipo = 'info') {
                 });
                 agregarEventos();
             } else {
-                mostrarAlerta("No se encontraron servicios.", 'error');
+                mostrarAlerta(" No se encontraron servicios.", 'error');
             }
         } catch (error) {
-            mostrarAlerta("Error al cargar los servicios.", 'error');
+            mostrarAlerta(" Error al cargar los servicios.", 'error');
             console.error("Error al cargar los servicios:", error);
         }
     }
@@ -168,16 +169,16 @@ function mostrarAlerta(mensaje, tipo = 'info') {
                     document.querySelector("#formRegistrarServicio").reset();
                     $("#registrarServicio").modal("hide");
                     mostrarServicios();
-                    mostrarAlerta("Servicio registrado exitosamente.", 'success');
+                    mostrarAlerta(" Servicio registrado exitosamente.", 'success');
                 } else {
-                    mostrarAlerta("Error al registrar el servicio.", 'error');
+                    mostrarAlerta(" Error al registrar el servicio.", 'error');
                 }
             } catch (error) {
-                mostrarAlerta("Error en la solicitud.", 'error');
+                mostrarAlerta(" Error en la solicitud.", 'error');
                 console.error("Error en la solicitud:", error);
             }
         } else {
-            mostrarAlerta("Por favor, completa todos los campos.", 'error');
+            mostrarAlerta(" Por favor, completa todos los campos.", 'error');
         }
     });
 
@@ -211,16 +212,16 @@ function mostrarAlerta(mensaje, tipo = 'info') {
                 if (response.ok) {
                     $("#modificarServicio").modal("hide");
                     mostrarServicios();
-                    mostrarAlerta("Servicio actualizado exitosamente.", 'success');
+                    mostrarAlerta(" Servicio actualizado exitosamente.", 'success');
                 } else {
-                    mostrarAlerta("Error al modificar el servicio.", 'error');
+                    mostrarAlerta(" Error al modificar el servicio.", 'error');
                 }
             } catch (error) {
-                mostrarAlerta("Error en la solicitud.", 'error');
+                mostrarAlerta(" Error en la solicitud.", 'error');
                 console.error("Error en la solicitud:", error);
             }
         } else {
-            mostrarAlerta("Por favor, completa todos los campos.", 'error');
+            mostrarAlerta(" Por favor, completa todos los campos.", 'error');
         }
     });
 
@@ -249,12 +250,12 @@ function mostrarAlerta(mensaje, tipo = 'info') {
             if (response.ok) {
                 $("#modificarEstadoServicio").modal("hide");
                 mostrarServicios(); // Recargar la tabla
-                mostrarAlerta("Estado actualizado exitosamente.", 'success');
+                mostrarAlerta(" Estado actualizado exitosamente.", 'success');
             } else {
-                mostrarAlerta("Error al actualizar el estado.", 'error');
+                mostrarAlerta(" Error al actualizar el estado.", 'error');
             }
         } catch (error) {
-            mostrarAlerta("Error en la solicitud.", 'error');
+            mostrarAlerta(" Error en la solicitud.", 'error');
             console.error("Error en la solicitud:", error);
         }
     });
