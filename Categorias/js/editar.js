@@ -19,7 +19,7 @@ async function actualizarCategoria(event) {
     // Obtener el token JWT desde localStorage
     const token = localStorage.getItem('jwt');
     if (!token) {
-        mostrarToast('No se encontró el token. Por favor, inicie sesión.', '#f44336');  // Error en rojo
+        mostrarToast('No se encontró el token. Por favor, inicie sesión.', 'error');  // Error en rojo
         return;
     }
 
@@ -52,7 +52,7 @@ async function actualizarCategoria(event) {
 
         if (response.ok) {
             const data = await response.json();
-            mostrarToast('Categoría actualizada exitosamente', '#4caf50');  // Éxito en verde
+            mostrarToast('Categoría actualizada exitosamente', 'success');  // Éxito en azul
             // Opcional: cerrar el modal y limpiar el formulario
             $('#modificarCategoria').modal('hide');
             document.getElementById('formModificarCategoria').reset();
@@ -60,10 +60,10 @@ async function actualizarCategoria(event) {
             obtenerCategorias();
         } else {
             const errorData = await response.json();
-            mostrarToast('Error al actualizar la categoría: ' + (errorData.message || 'Verifique los datos ingresados'), '#f44336');  // Error en rojo
+            mostrarToast('Error al actualizar la categoría: ' + (errorData.message || 'Verifique los datos ingresados'), 'error');  // Error en rojo
         }
     } catch (error) {
-        mostrarToast('Ocurrió un error al intentar actualizar la categoría.', '#f44336');  // Error en rojo
+        mostrarToast('Ocurrió un error al intentar actualizar la categoría.', 'error');  // Error en rojo
     }
 }
 
@@ -71,7 +71,7 @@ async function actualizarCategoria(event) {
 document.getElementById('formModificarCategoria').addEventListener('submit', actualizarCategoria);
 
 // Función para mostrar el mensaje tipo toast
-function mostrarToast(mensaje, color = "#092e95") {
+function mostrarToast(mensaje, tipo = 'success') {
     const alertaDiv = document.createElement("div");
     alertaDiv.classList.add("alerta");
 
@@ -80,8 +80,19 @@ function mostrarToast(mensaje, color = "#092e95") {
     textoDiv.classList.add("texto");
     textoDiv.textContent = mensaje;
 
-    // Establecer color de fondo personalizado si se pasa un color
-    alertaDiv.style.backgroundColor = color;
+    // Establecer color de fondo según el tipo de mensaje
+    let colorFondo = '';
+    let colorIcono = '';
+
+    if (tipo === 'success') {
+        colorFondo = "#092e95"; // Azul para éxito
+        colorIcono = "#092e95"; // El ícono también será azul
+    } else {
+        colorFondo = "#f44336"; // Rojo para error
+        colorIcono = "#f44336"; // El ícono también será rojo
+    }
+
+    alertaDiv.style.backgroundColor = colorFondo;
 
     // Crear el botón de cerrar
     const btnCerrar = document.createElement("button");
@@ -95,10 +106,14 @@ function mostrarToast(mensaje, color = "#092e95") {
         }, 500); // Retirar el div después de la animación
     });
 
-    // Crear icono (opcional, si lo deseas)
+    // Crear el ícono del vehículo (carrito)
     const iconoDiv = document.createElement("div");
     iconoDiv.classList.add("icono");
-    iconoDiv.innerHTML = "&#x1F4A1;"; // Icono de bombilla
+    const icono = '&#x1F698;'; // Ícono de vehículo (carrito)
+    iconoDiv.innerHTML = icono;
+
+    // Cambiar color del ícono al color de la alerta (azul o rojo)
+    iconoDiv.style.color = colorIcono;  // Asegura que el color del ícono se alinee con el fondo
 
     // Agregar los elementos a la alerta
     alertaDiv.appendChild(iconoDiv);

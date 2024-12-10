@@ -84,6 +84,9 @@ async function obtenerCategorias() {
         // Configurar los filtros
         configurarFiltros();
 
+        // Mostrar mensaje de éxito
+        mostrarToast('Categorías cargadas correctamente.', '#092e95'); // Azul para éxito
+
     } catch (error) {
         // Manejar errores de la solicitud
         console.error('Hubo un problema con la solicitud:', error);
@@ -147,10 +150,10 @@ function mostrarToast(mensaje, color = "#092e95") {
         }, 500); // Retirar el div después de la animación
     });
 
-    // Crear icono (opcional, si lo deseas)
+    // Crear icono (carrito)
     const iconoDiv = document.createElement("div");
     iconoDiv.classList.add("icono");
-    iconoDiv.innerHTML = "&#x1F4A1;"; // Icono de bombilla
+    iconoDiv.innerHTML = "&#x1F698;"; // Icono de carrito
 
     // Agregar los elementos a la alerta
     alertaDiv.appendChild(iconoDiv);

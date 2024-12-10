@@ -158,11 +158,9 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
                 if (response.ok) {
                     document.querySelector("#formRegistrarServicio").reset();
                     $("#registrarServicio").modal("hide");
-                    mostrarAlerta("Servicio registrado exitosamente.", 'error');
                     mostrarServicios();
                 } else {
                     console.error("Error al registrar el servicio.");
-                    mostrarToast('Ocurrió un error al intentar registrar el servicio.', '#f44336');  // Error en rojo
                 }
             } catch (error) {
                 console.error("Error en la solicitud:", error);
@@ -201,11 +199,9 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
 
                 if (response.ok) {
                     $("#modificarServicio").modal("hide");
-                    mostrarAlerta("Servicio actualizado exitosamente.", 'error');
                     mostrarServicios();
                 } else {
                     console.error("Error al modificar el servicio.");
-                    mostrarToast('Ocurrió un error al intentar modificar el servicio.', '#f44336');  // Error en rojo
                 }
             } catch (error) {
                 console.error("Error en la solicitud:", error);
@@ -239,11 +235,9 @@ const descripcion = document.querySelector("#descripcionser").value.trim();
 
             if (response.ok) {
                 $("#modificarEstadoServicio").modal("hide");
-                mostrarAlerta("Servicio actualizado correctamente.", 'error');
                 mostrarServicios(); // Recargar la tabla
             } else {
                 console.error("Error al actualizar el estado del servicio.");
-                mostrarToast('Ocurrió un error al intentar cambiar el estado.', '#f44336');  // Error en rojo
             }
         } catch (error) {
             console.error("Error en la solicitud:", error);
@@ -323,4 +317,3 @@ document.getElementById('filterState').addEventListener('change', filtrarUsuario
     cargarCategorias();
     mostrarServicios();
 });
-

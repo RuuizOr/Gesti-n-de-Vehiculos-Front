@@ -1,12 +1,12 @@
 .alerta {
     position: fixed;
-    top: 15px; /* Cambiado de 'bottom' a 'top' para mostrar en la parte superior */
+    top: 15px;
     right: 15px;
     width: auto;
     max-width: 400px;
     z-index: 1050;
     opacity: 0;
-    transform: translateY(-20px); /* Cambiado de '20px' a '-20px' para que se deslice desde arriba */
+    transform: translateY(-20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
     border-radius: 5px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -16,16 +16,17 @@
     color: #fff;
     font-family: Arial, sans-serif;
     background: #092e95;
+    justify-content: center; /* Centra el contenido */
 }
 
 .alerta.mostrar {
     opacity: 1;
-    transform: translateY(0); /* Asegura que la alerta esté en su posición correcta cuando se muestre */
+    transform: translateY(0);
 }
 
 .alerta.ocultar {
     opacity: 0;
-    transform: translateY(-20px); /* Desliza hacia arriba cuando se oculta */
+    transform: translateY(-20px);
 }
 
 .alerta .btn-cerrar {
@@ -36,6 +37,7 @@
     background: none;
     cursor: pointer;
     color: inherit;
+    z-index: 1060; /* Asegura que la X quede encima del contenido */
 }
 
 .alerta .btn-cerrar .fa {
@@ -48,5 +50,6 @@
 }
 
 .alerta .texto {
-    margin-right: 30px;
+    margin-left: 10px; /* Ajusta el espacio entre el icono y el texto */
+    padding-right: 30px; /* Añade espacio para la X de cierre */
 }

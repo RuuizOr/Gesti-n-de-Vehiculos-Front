@@ -4,19 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Listener para abrir el modal y prellenar los campos ocultos
     document.addEventListener('click', (event) => {
-        if (event.target.closest('.btn-success, .btn-danger')) {
-            const button = event.target.closest('button');
-
-            // Obtener los datos necesarios desde los atributos del botón
+        const button = event.target.closest('.btn-success, .btn-danger');
+        if (button) {
             const id = button.getAttribute('data-id');
             const estadoActual = button.getAttribute('data-estado') === 'true';
             const nuevoEstado = !estadoActual;
 
-            // Llenar los campos ocultos del formulario
             document.getElementById('idCategoria').value = id;
             document.getElementById('estadoCategoria').value = nuevoEstado;
 
-            // Mostrar el modal
             $(modalModificarEstado).modal('show');
         }
     });
@@ -33,14 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const url = 'http://localhost:8080/CategoriasDeServicios/status'; // URL de la API
 
-        // Obtener los datos del formulario
         const id = document.getElementById('idCategoria').value;
-        const estado = document.getElementById('estadoCategoria').value;
+        const estado = document.getElementById('estadoCategoria').value === 'true'; // Convertir a booleano
 
-        const payload = {
-            id,
-            status: estado === 'true' // Convertir a booleano
-        };
+        const payload = { id, status: estado };
 
         try {
             const response = await fetch(url, {
@@ -62,19 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Mostrar mensaje de éxito
             mostrarToast('Estado actualizado correctamente.', '#4caf50');  // Éxito en verde
 
-            // Cerrar el modal
             $(modalModificarEstado).modal('hide');
-
-            // Solución para remover el fondo del modal
-            document.body.classList.remove('modal-open');
-            const backdrop = document.querySelector('.modal-backdrop');
-            if (backdrop) {
-                backdrop.remove();
-            }
+            limpiarModal();
 
             // Recargar las categorías para reflejar los cambios
             obtenerCategorias();
-
         } catch (error) {
             console.error('Error al intentar cambiar el estado:', error);
             mostrarToast('Ocurrió un error al intentar cambiar el estado.', '#f44336');  // Error en rojo
@@ -82,55 +66,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Función para limpiar el modal y evitar residuos de fondos o backdrop
+function limpiarModal() {
+    document.body.classList.remove('modal-open');
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.remove();
+    }
+}
+
 // Función para mostrar el mensaje tipo toast
-function mostrarToast(mensaje, color = "#092e95") {
+// Función para mostrar el mensaje tipo toast
+function mostrarToast(mensaje, tipo = 'success') {
     const alertaDiv = document.createElement("div");
     alertaDiv.classList.add("alerta");
 
-    // Establecer el mensaje
     const textoDiv = document.createElement("div");
     textoDiv.classList.add("texto");
     textoDiv.textContent = mensaje;
 
-    // Establecer color de fondo personalizado si se pasa un color
+    // Cambiar el color a azul tanto para el éxito como para el error
+    const color = tipo === 'success' ? "#092e95" : "#092e95";  // Azul para éxito y error
     alertaDiv.style.backgroundColor = color;
 
-    // Crear el botón de cerrar
     const btnCerrar = document.createElement("button");
     btnCerrar.classList.add("btn-cerrar");
     btnCerrar.innerHTML = '&times;';
     btnCerrar.addEventListener("click", () => {
         alertaDiv.classList.remove("mostrar");
         alertaDiv.classList.add("ocultar");
-        setTimeout(() => {
-            alertaDiv.remove();
-        }, 500); // Retirar el div después de la animación
+        setTimeout(() => alertaDiv.remove(), 500);
     });
 
-    // Crear icono (opcional, si lo deseas)
     const iconoDiv = document.createElement("div");
     iconoDiv.classList.add("icono");
-    iconoDiv.innerHTML = "&#x1F4A1;"; // Icono de bombilla
+    iconoDiv.innerHTML = '&#x1F698;';  // Ícono de vehículo (carrito)
+    iconoDiv.style.color = color;
 
-    // Agregar los elementos a la alerta
     alertaDiv.appendChild(iconoDiv);
     alertaDiv.appendChild(textoDiv);
     alertaDiv.appendChild(btnCerrar);
 
-    // Añadir la alerta al body
     document.body.appendChild(alertaDiv);
 
-    // Mostrar la alerta con la clase de animación
-    setTimeout(() => {
-        alertaDiv.classList.add("mostrar");
-    }, 10); // Espera un poco antes de iniciar la animación
+    setTimeout(() => alertaDiv.classList.add("mostrar"), 10);
 
-    // Ocultar la alerta después de 3 segundos
     setTimeout(() => {
         alertaDiv.classList.remove("mostrar");
         alertaDiv.classList.add("ocultar");
-        setTimeout(() => {
-            alertaDiv.remove();
-        }, 500); // Eliminar el div después de la animación
-    }, 3000); // Duración de la alerta
+        setTimeout(() => alertaDiv.remove(), 500);
+    }, 3000);
 }

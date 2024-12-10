@@ -9,15 +9,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Función para mostrar una alerta personalizada
     function mostrarAlerta(tipo, mensaje) {
+        const alertaExistente = document.querySelector('.alerta');
+        if (alertaExistente) {
+            alertaExistente.classList.remove('mostrar');
+            alertaExistente.classList.add('ocultar');
+            // Esperamos que la animación de desaparición termine antes de eliminarla
+            setTimeout(() => alertaExistente.remove(), 500);
+        }
+
         const alerta = document.createElement('div');
         alerta.classList.add('alerta', 'mostrar');
 
-        const icono = tipo === 'success' ? '<i class="fas fa-check-circle icono"></i>' : '<i class="fas fa-times-circle icono"></i>';
-        const claseColor = tipo === 'success' ? 'bg-success' : 'bg-danger';
-        alerta.classList.add(claseColor);
-
+        const icono = tipo === 'success' ? '&#x1f698;' : '&#x1f698;'; // Icono de vehículo
         alerta.innerHTML = `${icono}<span class="texto">${mensaje}</span><button class="btn-cerrar"><i class="fa fa-times"></i></button>`;
+        
         document.body.appendChild(alerta);
+
+        const btnCerrar = alerta.querySelector('.btn-cerrar');
+        btnCerrar.addEventListener('click', () => {
+            alerta.classList.remove('mostrar');
+            alerta.classList.add('ocultar');
+            setTimeout(() => alerta.remove(), 500);
+        });
 
         setTimeout(() => {
             alerta.classList.remove('mostrar');
@@ -25,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             setTimeout(() => alerta.remove(), 500);
         }, 3000);
     }
+
 
     // Cargar vehículos en la tabla
     async function cargarVehiculos() {
