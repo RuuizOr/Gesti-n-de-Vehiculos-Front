@@ -1,10 +1,12 @@
 // Mostrar alerta personalizada
 function mostrarAlerta(mensaje, tipo = 'info') {
     const alerta = document.createElement('div');
-    alerta.classList.add('alerta', tipo === 'error' ? 'bg-danger' : 'bg-success', 'mostrar');
+    alerta.classList.add('alerta', 'mostrar');
 
+    // Configurar estilo de fondo y contenido
+    alerta.style.backgroundColor = '#092e95'; // Color único para todas las alertas
     alerta.innerHTML = `
-        <span class="texto">${mensaje}</span>
+        <span class="texto">🚘 ${mensaje}</span>
         <button class="btn-cerrar" onclick="this.parentElement.classList.remove('mostrar')">
             <i class="fa fa-times"></i>
         </button>

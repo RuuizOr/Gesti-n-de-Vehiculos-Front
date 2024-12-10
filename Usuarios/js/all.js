@@ -1,10 +1,12 @@
 // Función para mostrar alertas personalizadas
 function mostrarAlerta(mensaje, tipo = 'info') {
     const alerta = document.createElement('div');
-    alerta.classList.add('alerta', tipo === 'error' ? 'bg-danger' : 'bg-success', 'mostrar');
+    alerta.classList.add('alerta', 'mostrar');
 
+    // Configurar el estilo de fondo y contenido según el tipo
+    alerta.style.backgroundColor = '#092e95'; // Color único para todas las alertas
     alerta.innerHTML = `
-        <span class="texto">${mensaje}</span>
+        <span class="texto">🚘 ${mensaje}</span> 
         <button class="btn-cerrar" onclick="this.parentElement.classList.remove('mostrar')">
             <i class="fa fa-times"></i>
         </button>
@@ -18,6 +20,7 @@ function mostrarAlerta(mensaje, tipo = 'info') {
         setTimeout(() => alerta.remove(), 500); // Eliminar del DOM después de la transición
     }, 5000);
 }
+
 
 // Función para obtener y mostrar los usuarios
 async function obtenerUsuarios() {
