@@ -82,7 +82,6 @@ async function obtenerCategorias() {
         });
 
         // Mostrar mensaje de éxito
-        mostrarToast('Categorías cargadas exitosamente', '#4caf50');  // Éxito en verde
 
         // Configurar los filtros
         configurarFiltros();
