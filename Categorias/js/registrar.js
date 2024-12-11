@@ -40,7 +40,8 @@ async function registrarCategoria() {
 
     // Verificar si la respuesta fue exitosa
     if (!response.ok) {
-      throw new Error('Error al registrar la categoría: ' + response.statusText);
+      const errorMessage = await response.text(); // Captura el mensaje del servidor si existe
+      throw new Error('Error al registrar la categoría: ' + errorMessage);
     }
 
     // Mostrar mensaje de éxito
@@ -68,7 +69,7 @@ document.getElementById('formRegistrarCategoria').addEventListener('submit', (ev
 });
 
 // Función para mostrar el mensaje tipo toast
-function mostrarToast(mensaje, tipo = 'success') {
+function mostrarToast(mensaje, color = '#092e95') {
   const alertaDiv = document.createElement("div");
   alertaDiv.classList.add("alerta");
 
@@ -76,8 +77,7 @@ function mostrarToast(mensaje, tipo = 'success') {
   textoDiv.classList.add("texto");
   textoDiv.textContent = mensaje;
 
-  // Establecer color de fondo en azul tanto para éxito como error
-  const color = "#092e95";  // Azul para todo
+  // Establecer color de fondo en azul
   alertaDiv.style.backgroundColor = color;
 
   const btnCerrar = document.createElement("button");

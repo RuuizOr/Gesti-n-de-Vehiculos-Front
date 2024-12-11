@@ -1,36 +1,31 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const formModificarEstado = document.getElementById('formModificarEstadoCate');
-    const modalModificarEstado = document.getElementById('modificarEstadoServicio');
+$(document).ready(function () {
+    const formModificarEstado = $('#formModificarEstadoCate');
+    const modalModificarEstado = $('#modificarEstadoServicio');
 
-    // Listener para abrir el modal y prellenar los campos ocultos
-    document.addEventListener('click', (event) => {
-        const button = event.target.closest('.btn-success, .btn-danger');
-        if (button) {
-            const id = button.getAttribute('data-id');
-            const estadoActual = button.getAttribute('data-estado') === 'true';
-            const nuevoEstado = !estadoActual;
+    $(document).on('click', '.btn-success, .btn-danger', function () {
+        const button = $(this);
+        const id = button.data('id');
+        const estadoActual = button.data('estado') === true;
+        const nuevoEstado = !estadoActual;
 
-            document.getElementById('idCategoria').value = id;
-            document.getElementById('estadoCategoria').value = nuevoEstado;
+        $('#idCategoria').val(id);
+        $('#estadoCategoria').val(nuevoEstado);
 
-            $(modalModificarEstado).modal('show');
-        }
+        modalModificarEstado.modal('show');
     });
 
-    // Listener para enviar la solicitud de cambio de estado
-    formModificarEstado.addEventListener('submit', async (event) => {
+    formModificarEstado.on('submit', async function (event) {
         event.preventDefault(); // Prevenir el comportamiento por defecto del formulario
 
-        const token = localStorage.getItem('jwt'); // Obtener el token JWT
+        const token = localStorage.getItem('jwt');
         if (!token) {
-            mostrarToast('No se encontró el token. Por favor, inicie sesión.', '#f44336');  // Error en rojo
+            mostrarToast('No se encontró el token. Por favor, inicie sesión.', '#f44336');
             return;
         }
 
-        const url = 'http://localhost:8080/CategoriasDeServicios/status'; // URL de la API
-
-        const id = document.getElementById('idCategoria').value;
-        const estado = document.getElementById('estadoCategoria').value === 'true'; // Convertir a booleano
+        const url = 'http://localhost:8080/CategoriasDeServicios/status';
+        const id = $('#idCategoria').val();
+        const estado = $('#estadoCategoria').val() === 'true';
 
         const payload = { id, status: estado };
 
@@ -49,71 +44,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Error al cambiar el estado: ' + response.statusText);
             }
 
-            const data = await response.json();
-
-            // Mostrar mensaje de éxito
-            mostrarToast('Estado actualizado correctamente.', '#4caf50');  // Éxito en verde
-
-            $(modalModificarEstado).modal('hide');
+            mostrarToast('Estado actualizado correctamente.', '#4caf50');
+            modalModificarEstado.modal('hide');
             limpiarModal();
-
-            // Recargar las categorías para reflejar los cambios
             obtenerCategorias();
         } catch (error) {
             console.error('Error al intentar cambiar el estado:', error);
-            mostrarToast('Ocurrió un error al intentar cambiar el estado.', '#f44336');  // Error en rojo
+            mostrarToast('Ocurrió un error al intentar cambiar el estado.', '#f44336');
         }
     });
-});
 
-// Función para limpiar el modal y evitar residuos de fondos o backdrop
-function limpiarModal() {
-    document.body.classList.remove('modal-open');
-    const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-        backdrop.remove();
+    function limpiarModal() {
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     }
-}
 
-// Función para mostrar el mensaje tipo toast
-// Función para mostrar el mensaje tipo toast
-function mostrarToast(mensaje, tipo = 'success') {
-    const alertaDiv = document.createElement("div");
-    alertaDiv.classList.add("alerta");
+    function mostrarToast(mensaje, tipo = 'success') {
+        const alertaDiv = $('<div>').addClass('alerta').css('backgroundColor', tipo === 'success' ? '#092e95' : '#092e95');
+        const textoDiv = $('<div>').addClass('texto').text(mensaje);
+        const btnCerrar = $('<button>').addClass('btn-cerrar').html('&times;').on('click', function () {
+            alertaDiv.removeClass('mostrar').addClass('ocultar');
+            setTimeout(() => alertaDiv.remove(), 500);
+        });
+        const iconoDiv = $('<div>').addClass('icono').html('&#x1F698;').css('color', '#092e95');
 
-    const textoDiv = document.createElement("div");
-    textoDiv.classList.add("texto");
-    textoDiv.textContent = mensaje;
+        alertaDiv.append(iconoDiv, textoDiv, btnCerrar);
+        $('body').append(alertaDiv);
 
-    // Cambiar el color a azul tanto para el éxito como para el error
-    const color = tipo === 'success' ? "#092e95" : "#092e95";  // Azul para éxito y error
-    alertaDiv.style.backgroundColor = color;
-
-    const btnCerrar = document.createElement("button");
-    btnCerrar.classList.add("btn-cerrar");
-    btnCerrar.innerHTML = '&times;';
-    btnCerrar.addEventListener("click", () => {
-        alertaDiv.classList.remove("mostrar");
-        alertaDiv.classList.add("ocultar");
-        setTimeout(() => alertaDiv.remove(), 500);
-    });
-
-    const iconoDiv = document.createElement("div");
-    iconoDiv.classList.add("icono");
-    iconoDiv.innerHTML = '&#x1F698;';  // Ícono de vehículo (carrito)
-    iconoDiv.style.color = color;
-
-    alertaDiv.appendChild(iconoDiv);
-    alertaDiv.appendChild(textoDiv);
-    alertaDiv.appendChild(btnCerrar);
-
-    document.body.appendChild(alertaDiv);
-
-    setTimeout(() => alertaDiv.classList.add("mostrar"), 10);
-
-    setTimeout(() => {
-        alertaDiv.classList.remove("mostrar");
-        alertaDiv.classList.add("ocultar");
-        setTimeout(() => alertaDiv.remove(), 500);
-    }, 3000);
-}
+        setTimeout(() => alertaDiv.addClass('mostrar'), 10);
+        setTimeout(() => {
+            alertaDiv.removeClass('mostrar').addClass('ocultar');
+            setTimeout(() => alertaDiv.remove(), 500);
+        }, 3000);
+    }
+});
