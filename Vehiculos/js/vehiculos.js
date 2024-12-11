@@ -65,13 +65,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td>${vehiculo.marca}</td>
                         <td>${vehiculo.color}</td>
                         <td>
-<<<<<<< HEAD
+
                             <button id="botonStatus" class="btn btn-sm ${vehiculo.status ? 'btn-success' : 'btn-danger'} cambiarEstado" 
                                     data-id="${vehiculo.id}" data-status="${vehiculo.status}">
-=======
-                            <button class="btn btn-sm ${vehiculo.status ? 'btn-success' : 'btn-danger'} cambiarEstado" 
-                                    data-id="${vehiculo.id}" data-status="${vehiculo.status}"><i class="fas fa-sync-alt"></i>
->>>>>>> 416327d1c03b6f32a03958acc37452db1761f845
+
                                 ${vehiculo.status ? 'Activo' : 'Inactivo'}
                             </button>
                         </td>
