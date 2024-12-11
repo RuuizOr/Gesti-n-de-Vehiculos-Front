@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                         data-id="${servicio.id}" 
                                         data-status="${servicio.status}" 
                                         data-toggle="modal" 
-                                        data-target="#modificarEstadoServicio">
+                                        data-target="#modificarEstadoServicio"><i class="fas fa-sync-alt"></i>
                                     ${servicio.status ? "Activo" : "Inactivo"}
                                 </button>
                             </td>
