@@ -56,7 +56,7 @@ async function obtenerCategorias() {
                     <td>${categoria.nombre}</td>
                     <td>${categoria.descripcion}</td>
                     <td>
-                        <button class="btn btn-sm ${estadoClase}"
+                        <button class="btn btn-sm ${estadoClase}" id="st"
                             data-id="${categoria.id}" 
                             data-estado="${categoria.status}" 
                             data-toggle="modal" 
@@ -65,7 +65,7 @@ async function obtenerCategorias() {
                         </button>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-primary btnIcono"
+                        <button class="btn btn-sm btn-primary btnIcono" id="a1221"
                             data-id="${categoria.id}" 
                             data-nombre="${categoria.nombre}" 
                             data-descripcion="${categoria.descripcion}" 

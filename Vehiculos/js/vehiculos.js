@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td>${vehiculo.marca}</td>
                         <td>${vehiculo.color}</td>
                         <td>
-                            <button class="btn btn-sm ${vehiculo.status ? 'btn-success' : 'btn-danger'} cambiarEstado" 
+                            <button id="botonStatus" class="btn btn-sm ${vehiculo.status ? 'btn-success' : 'btn-danger'} cambiarEstado" 
                                     data-id="${vehiculo.id}" data-status="${vehiculo.status}">
                                 ${vehiculo.status ? 'Activo' : 'Inactivo'}
                             </button>
