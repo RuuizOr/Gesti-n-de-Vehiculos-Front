@@ -153,48 +153,48 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Guardar cambios al editar vehículo
-    document.getElementById('formModificarVehiculo').addEventListener('submit', async (event) => {
-        event.preventDefault();
-    
-        const id = document.getElementById('idMod').value;
-        const modelo = document.getElementById('modeloMod').value.trim();
-        const marca = document.getElementById('marcaMod').value.trim();
-        const color = document.getElementById('colorMod').value.trim();
-        const status = document.querySelector(`.btnIcono[data-id="${id}"]`).closest('tr').querySelector('.cambiarEstado').getAttribute('data-status') === 'true';
-    
-        if (!id || !modelo || !marca || !color) {
-            mostrarAlerta('error', 'Todos los campos son obligatorios.');
-            return;
+document.getElementById('formModificarVehiculo').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const id = document.getElementById('idMod').value;
+    const modelo = document.getElementById('modeloMod').value.trim();
+    const marca = document.getElementById('marcaMod').value.trim();
+    const color = document.getElementById('colorMod').value.trim();
+    const status = document.querySelector(`.btnIcono[data-id="${id}"]`).closest('tr').querySelector('.cambiarEstado').getAttribute('data-status') === 'true';
+
+    if (!id || !modelo || !marca || !color) {
+        mostrarAlerta('error', 'Todos los campos son obligatorios.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL_VEHICULOS}/actualizar`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id, modelo, marca, color, status }) // Incluye el estado actual
+        });
+
+        if (response.ok) {
+            mostrarAlerta('success', 'Vehículo actualizado exitosamente.');
+            cargarVehiculos(); // Recarga la tabla de vehículos
+            
+            // Cerrar el modal
+            $('#modificarVehiculo').modal('hide');
+            
+            // Limpiar el formulario
+            document.getElementById('formModificarVehiculo').reset();
+        } else {
+            mostrarAlerta('error', 'Error al actualizar el vehículo.');
         }
-    
-        try {
-            const response = await fetch(`${API_URL_VEHICULOS}/actualizar`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id, modelo, marca, color, status }) // Incluye el estado actual
-            });
-    
-            if (response.ok) {
-                mostrarAlerta('success', 'Vehículo actualizado exitosamente.');
-                cargarVehiculos();
-                const modal = document.getElementById('modificarVehiculo');
-                    modal.classList.remove('show');
-                    modal.style.display = 'none';
-                    const backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) {
-                        backdrop.remove();
-                    }
-            } else {
-                mostrarAlerta('error', 'Error al actualizar el vehículo.');
-            }
-        } catch (error) {
-            mostrarAlerta('error', 'Hubo un error al intentar actualizar el vehículo.');
-            console.error(error);
-        }
-    });
+    } catch (error) {
+        mostrarAlerta('error', 'Hubo un error al intentar actualizar el vehículo.');
+        console.error(error);
+    }
+});
+
     
     
     document.body.addEventListener('click', function (event) {

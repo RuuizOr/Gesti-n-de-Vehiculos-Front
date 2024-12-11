@@ -144,38 +144,46 @@
     </div>
 
     <!-- Modal de modificar vehículo -->
-    <div class="modal" id="modificarVehiculo" tabindex="-1" role="dialog" aria-labelledby="modificarVehiculoLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modificarVehiculoLabel">Modificar Vehículo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="formModificarVehiculo">
-                        <input type="hidden" id="idMod" name="idMod">
-                        <div class="form-group">
-                            <label for="modeloMod">Modelo:</label>
-                            <input type="text" class="form-control" id="modeloMod" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="marcaMod">Marca:</label>
-                            <input type="text" class="form-control" id="marcaMod" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="colorMod">Color:</label>
-                            <input type="text" class="form-control" id="colorMod" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Guardar cambios</button>
-                        </div>
-                    </form>
-                </div>
+<div class="modal fade" id="modificarVehiculo" tabindex="-1" role="dialog" aria-labelledby="modificarVehiculoLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modificarVehiculoLabel">Modificar Vehículo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formModificarVehiculo">
+                    <input type="hidden" id="idMod" name="idMod">
+                    
+                    <!-- Modelo -->
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="modeloMod" name="modeloMod" maxlength="50" placeholder=" " required>
+                        <label for="modeloMod" class="col-form-label">Modelo:</label>
+                    </div>
+                    
+                    <!-- Marca -->
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="marcaMod" name="marcaMod" maxlength="50" placeholder=" " required>
+                        <label for="marcaMod" class="col-form-label">Marca:</label>
+                    </div>
+                    
+                    <!-- Color -->
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="colorMod" name="colorMod" maxlength="50" placeholder=" " required>
+                        <label for="colorMod" class="col-form-label">Color:</label>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
+
 
     <!-- Modal de cambio de estado -->
     <div class="modal fade" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel" aria-hidden="true">
