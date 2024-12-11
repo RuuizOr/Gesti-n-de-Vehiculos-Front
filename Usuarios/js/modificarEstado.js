@@ -40,11 +40,10 @@ $('#formModificarEstado').on('submit', async function (e) {
         if (!response.ok) {
             throw new Error('Error al cambiar el estado: ' + response.statusText);
         }
+        mostrarAlerta('Estado actualizado correctamente.', 'success');
 
         // Recargar los datos de los usuarios
-        await obtenerUsuarios();
         $('#modificarEstadoServicio').modal('hide'); // Cerrar el modal
-        mostrarAlerta('Estado actualizado correctamente.', 'success');
     } catch (error) {
         console.error('Error al intentar cambiar el estado:', error);
         mostrarAlerta('Ocurrió un error al intentar cambiar el estado del usuario.', 'error');
