@@ -159,6 +159,7 @@
 
 
     <!-- Modificar datos del servicio -->
+<<<<<<< HEAD
     <div class="modal fade" id="modificarServicio" class="modificarServicio" tabindex="-1" role="dialog" aria-labelledby="modificarServiciolLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -192,10 +193,53 @@
                         </div>
                     </form>
                 </div>
+=======
+<div class="modal fade" id="modificarServicio" tabindex="-1" role="dialog" aria-labelledby="modificarServiciolLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modificarServiciolLabel">Modificar Servicio</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formModificarServicio">
+                    <input type="hidden" id="idMod" name="idMod"> <!-- Campo oculto para el ID -->
+                    
+                    <!-- Nombre -->
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="nombreMod" name="nombreMod" maxlength="50" placeholder=" " required>
+                        <label for="nombreMod" class="col-form-label">Nombre:</label>
+                    </div>
+                    
+                    <!-- Descripción -->
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="descripcionMod" name="descripcionMod" maxlength="255" placeholder=" " required>
+                        <label for="descripcionMod" class="col-form-label">Descripción:</label>
+                    </div>
+                    
+                    <!-- Categoría -->
+                    <div class="form-group">
+                        <select class="form-control" id="categoriaMod" name="categoriaMod" required>
+                            <option value="">Seleccione una categoría</option>
+                            <!-- Las opciones se llenarán dinámicamente -->
+                        </select>
+                        <label for="categoriaMod" class="col-form-label">Categoría:</label>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+>>>>>>> 416327d1c03b6f32a03958acc37452db1761f845
             </div>
         </div>
     </div>
+</div>
 
+
+<!--Modificar Estado del servicio-->
     <div class="modal" id="modificarEstadoServicio" tabindex="-1" role="dialog" aria-labelledby="customModalLabel"
     aria-hidden="true">
    <div class="modal-dialog custom-modal-dialog" role="document">
