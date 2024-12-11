@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Cargar vehículos en la tabla
     async function cargarVehiculos() {
         try {
-            const response = await fetch(`${API_URL_VEHICULOS}/activos`, {
+            const response = await fetch(`${API_URL_VEHICULOS}/all`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -196,44 +196,66 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
     
-
-    // Cambiar estado del vehículo
+    
     document.body.addEventListener('click', function (event) {
         if (event.target.closest('.cambiarEstado')) {
             const btn = event.target.closest('.cambiarEstado');
             const id = btn.getAttribute('data-id');
             const nuevoEstado = btn.getAttribute('data-status') === 'true' ? false : true;
     
-            // Mostrar el modal de confirmación
+            // Guardar los datos necesarios en el modal
             document.getElementById('idServicio').value = id;
             document.getElementById('estadoServicio').value = nuevoEstado;
+    
+            // Mostrar el modal de confirmación
             $('#modificarEstadoServicio').modal('show');
         }
     });
     
-    // Manejar la confirmación del cambio de estado
-    document.getElementById('formModificarEstado').addEventListener('submit', async function (event) {
+    // Confirmar el cambio de estado desde el modal
+    document.getElementById('formModificarEstado').addEventListener('submit', function (event) {
         event.preventDefault();
     
         const id = document.getElementById('idServicio').value;
         const nuevoEstado = document.getElementById('estadoServicio').value === 'true';
     
+        // Obtener datos existentes del vehículo desde la fila de la tabla
+        const fila = document.querySelector(`.cambiarEstado[data-id="${id}"]`).closest('tr');
+        const modelo = fila.cells[0].textContent.trim();
+        const marca = fila.cells[1].textContent.trim();
+        const color = fila.cells[2].textContent.trim();
+    
+        // Construir el objeto de datos para enviar
+        const vehiculoData = {
+            id: parseInt(id),
+            modelo: modelo,
+            marca: marca,
+            color: color,
+            status: nuevoEstado
+        };
+    
+        // Llamar a la API para cambiar el estado
+        cambiarEstadoVehiculo(vehiculoData);
+    
+        // Ocultar el modal
+        $('#modificarEstadoServicio').modal('hide');
+    });
+    
+    // Función para llamar a la API y cambiar el estado del vehículo
+    async function cambiarEstadoVehiculo(vehiculoData) {
         try {
-            const response = await fetch(`${API_URL_VEHICULOS}/cambiar-estado/${id}?status=${nuevoEstado}`, {
+            const response = await fetch(`${API_URL_VEHICULOS}/status`, {
                 method: 'PUT',
-                headers: { 'Authorization': `Bearer ${token}` }
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(vehiculoData) // Enviar el objeto como JSON
             });
     
             if (response.ok) {
                 mostrarAlerta('success', 'Estado del vehículo cambiado exitosamente.');
                 cargarVehiculos();
-                const modal = document.getElementById('modificarEstadoServicio');
-                    modal.classList.remove('show');
-                    modal.style.display = 'none';
-                    const backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) {
-                        backdrop.remove();
-                    }
             } else {
                 mostrarAlerta('error', 'Error al cambiar el estado del vehículo.');
             }
@@ -241,42 +263,43 @@ document.addEventListener('DOMContentLoaded', function () {
             mostrarAlerta('error', 'Hubo un error al intentar cambiar el estado.');
             console.error(error);
         }
-    });
+    }
+    
 
 
     // Función para filtrar los usuarios
-function filtrarUsuarios() {
-    const nombre = document.getElementById('filterName').value.toLowerCase();
-    const estado = document.getElementById('filterState').value;
+    function filtrarUsuarios() {
+        const nombre = document.getElementById('filterName').value.toLowerCase();
+        const estado = document.getElementById('filterState').value;
 
-    // Obtener todas las filas de la tabla
-    const filas = document.querySelectorAll('#vehiculosTableBody tr');
+        // Obtener todas las filas de la tabla
+        const filas = document.querySelectorAll('#vehiculosTableBody tr');
 
-    // Iterar sobre todas las filas
-    filas.forEach(fila => {
-        const nombreUsuario = fila.cells[0].textContent.toLowerCase();
-        // Obtener el estado desde el botón dentro de la fila
-        const estadoBoton = fila.querySelector('button').getAttribute('data-status'); // Obtener el estado del botón
+        // Iterar sobre todas las filas
+        filas.forEach(fila => {
+            const nombreUsuario = fila.cells[0].textContent.toLowerCase();
+            // Obtener el estado desde el botón dentro de la fila
+            const estadoBoton = fila.querySelector('button').getAttribute('data-status'); // Obtener el estado del botón
 
-        // Comprobar si la fila cumple con los filtros
-        const coincideNombre = nombreUsuario.includes(nombre);
+            // Comprobar si la fila cumple con los filtros
+            const coincideNombre = nombreUsuario.includes(nombre);
 
-        let coincideEstado = true; // Si no se selecciona estado, coincide siempre
-        if (estado) {
-            // Compara si el estado seleccionado corresponde con el estado del usuario
-            coincideEstado = (estado === 'Activo' && estadoBoton === 'true') ||
-                 (estado === 'NoActivo' && estadoBoton === 'false');
+            let coincideEstado = true; // Si no se selecciona estado, coincide siempre
+            if (estado) {
+                // Compara si el estado seleccionado corresponde con el estado del usuario
+                coincideEstado = (estado === 'Activo' && estadoBoton === 'true') ||
+                    (estado === 'NoActivo' && estadoBoton === 'false');
 
-        }
+            }
 
-        // Mostrar u ocultar la fila según los filtros
-        if (coincideNombre && coincideEstado) {
-            fila.style.display = ''; // Mostrar la fila
-        } else {
-            fila.style.display = 'none'; // Ocultar la fila
-        }
-    });
-}
+            // Mostrar u ocultar la fila según los filtros
+            if (coincideNombre && coincideEstado) {
+                fila.style.display = ''; // Mostrar la fila
+            } else {
+                fila.style.display = 'none'; // Ocultar la fila
+            }
+        });
+    }
 
 // Agregar eventos a los filtros
 document.getElementById('filterName').addEventListener('input', filtrarUsuarios);
