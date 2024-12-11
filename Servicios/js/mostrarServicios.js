@@ -166,13 +166,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 if (response.ok) {
-                    document.querySelector("#formRegistrarServicio").reset();
-                    $("#registrarServicio").modal("hide");
                     mostrarServicios();
-                    mostrarAlerta(" Servicio registrado exitosamente.", 'success');
+                    mostrarAlerta("Servicio registrado exitosamente.", 'success');
+                    const modal = document.getElementById('registrarServicio');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
                 } else {
-                    mostrarAlerta(" Error al registrar el servicio.", 'error');
+                    mostrarAlerta("Error al registrar el servicio.", 'error');
                 }
+                
             } catch (error) {
                 mostrarAlerta(" Error en la solicitud.", 'error');
                 console.error("Error en la solicitud:", error);
@@ -210,12 +216,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 if (response.ok) {
-                    $("#modificarServicio").modal("hide");
                     mostrarServicios();
-                    mostrarAlerta(" Servicio actualizado exitosamente.", 'success');
+                    mostrarAlerta("Servicio actualizado exitosamente.", 'success');
+                    const modal = document.getElementById('modificarServicio');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
                 } else {
-                    mostrarAlerta(" Error al modificar el servicio.", 'error');
+                    mostrarAlerta("Error al modificar el servicio.", 'error');
                 }
+                
             } catch (error) {
                 mostrarAlerta(" Error en la solicitud.", 'error');
                 console.error("Error en la solicitud:", error);
@@ -248,12 +261,19 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (response.ok) {
-                $("#modificarEstadoServicio").modal("hide");
-                mostrarServicios(); // Recargar la tabla
-                mostrarAlerta(" Estado actualizado exitosamente.", 'success');
+                mostrarServicios(); // Recarga la lista de servicios
+                mostrarAlerta("Estado actualizado exitosamente.", 'success');
+                const modal = document.getElementById('modificarEstadoServicio');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
             } else {
-                mostrarAlerta(" Error al actualizar el estado.", 'error');
+                mostrarAlerta("Error al actualizar el estado.", 'error');
             }
+            
         } catch (error) {
             mostrarAlerta(" Error en la solicitud.", 'error');
             console.error("Error en la solicitud:", error);

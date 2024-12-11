@@ -112,9 +112,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (response.ok) {
                 mostrarAlerta('success', 'Vehículo registrado exitosamente');
-                document.getElementById('formRegistrarVehiculo').reset();
-                $('#registrarVehiculo').modal('hide');
                 cargarVehiculos();
+                const modal = document.getElementById('registrarVehiculo');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
             } else {
                 mostrarAlerta('error', 'Error al registrar el vehículo.');
             }
@@ -174,8 +179,14 @@ document.addEventListener('DOMContentLoaded', function () {
     
             if (response.ok) {
                 mostrarAlerta('success', 'Vehículo actualizado exitosamente.');
-                $('#modificarVehiculo').modal('hide');
                 cargarVehiculos();
+                const modal = document.getElementById('modificarVehiculo');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
             } else {
                 mostrarAlerta('error', 'Error al actualizar el vehículo.');
             }
@@ -215,8 +226,14 @@ document.addEventListener('DOMContentLoaded', function () {
     
             if (response.ok) {
                 mostrarAlerta('success', 'Estado del vehículo cambiado exitosamente.');
-                $('#modificarEstadoServicio').modal('hide');
                 cargarVehiculos();
+                const modal = document.getElementById('modificarEstadoServicio');
+                    modal.classList.remove('show');
+                    modal.style.display = 'none';
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) {
+                        backdrop.remove();
+                    }
             } else {
                 mostrarAlerta('error', 'Error al cambiar el estado del vehículo.');
             }
