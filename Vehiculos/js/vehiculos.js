@@ -105,11 +105,7 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
             }
     
             data.forEach(vehiculo => {
-                // Crear una lista de servicios
-                const serviciosHTML = vehiculo.servicios.map(servicio => `
-                    <li>${servicio.nombre} - (${servicio.categoria.nombre})</li>
-                `).join('');
-    
+                const serviciosHTML = JSON.stringify(vehiculo.servicios); // Convierte los servicios a JSON para pasarlos como atributo
                 const row = `
                     <tr align="center">
                         <td>${vehiculo.modelo}</td>
@@ -117,8 +113,8 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
                         <td>${vehiculo.color}</td>
                         <td>
                             <button class="btn btn-sm ${vehiculo.status ? 'btn-success' : 'btn-danger'} cambiarEstado" 
-                                    data-id="${vehiculo.id}" data-status="${vehiculo.status}"><i class="fas fa-sync-alt"></i>
-                                ${vehiculo.status ? 'Activo' : 'Inactivo'}
+                                    data-id="${vehiculo.id}" data-status="${vehiculo.status}">
+                                <i class="fas fa-sync-alt"></i> ${vehiculo.status ? 'Activo' : 'Inactivo'}
                             </button>
                         </td>
                         <td>
@@ -134,18 +130,53 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
                             </button>
                         </td>
                         <td>
-                            <ul>${serviciosHTML}</ul> <!-- Lista de servicios -->
+                            <button class="btn btn-sm btn-info btnVerServicios" 
+                                    data-id="${vehiculo.id}" data-servicios='${serviciosHTML}'>
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
                         </td>
                     </tr>`;
                 tableBody.innerHTML += row;
-            });
+            });            
     
             agregarEventos();
         } catch (error) {
             console.error(error);
-            mostrarAlerta('error', 'Hubo un error al cargar los vehículos.');
         }
     }
+    
+
+    document.body.addEventListener('click', function (event) {
+        if (event.target.closest('.btnVerServicios')) {
+            const btn = event.target.closest('.btnVerServicios');
+            const vehiculoId = btn.getAttribute('data-id');
+            const listaServicios = btn.getAttribute('data-servicios'); // Servicios asociados en formato JSON
+            
+            // Llenar la lista de servicios en el modal
+            const ulServicios = document.getElementById('listaServicios');
+            ulServicios.innerHTML = ''; // Limpia los servicios previos
+    
+            const servicios = JSON.parse(listaServicios); // Asegúrate de que estén en JSON
+    
+            if (servicios.length === 0) {
+                const noServiciosMessage = document.createElement('li');
+                noServiciosMessage.textContent = 'No hay servicios aún';
+                noServiciosMessage.className = 'list-group-item text-center text-muted';
+                ulServicios.appendChild(noServiciosMessage);
+            } else {
+                servicios.forEach(servicio => {
+                    const li = document.createElement('li');
+                    li.textContent = `${servicio.nombre} - (${servicio.categoria.nombre})`;
+                    li.className = 'list-group-item';
+                    ulServicios.appendChild(li);
+                });
+            }
+    
+            // Mostrar el modal
+            $('#modalServicios').modal('show');
+        }
+    });
+    
     
 
     document.getElementById('formRegistrarVehiculo').addEventListener('submit', async (event) => {
@@ -246,7 +277,6 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
             $('#asignarServicio').modal('show');
         }
     });
-    
 
     async function asignarServicio(vehiculoId, servicioId) {
         try {

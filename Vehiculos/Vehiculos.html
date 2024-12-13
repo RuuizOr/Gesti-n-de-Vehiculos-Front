@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    <--Modal asignarServicio ->
+    <!-- Modal asignarServicio -->
     <div class="modal fade asignarServicio" id="asignarServicio" tabindex="-1" role="dialog" aria-labelledby="asignarServicioLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -239,6 +239,29 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para Servicios -->
+<div class="modal fade" id="modalServicios" tabindex="-1" role="dialog" aria-labelledby="modalServiciosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalServiciosLabel">Lista de Servicios</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="listaServicios" class="list-group" style="color: black;">
+                    <!-- Los servicios se llenarán aquí -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <!-- Scripts utilizados -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
