@@ -92,19 +92,24 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
             const response = await fetch(`${API_URL_VEHICULOS}/all`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-
-                if (!response.ok) throw new Error('Error al cargar los vehículos');
-
+    
+            if (!response.ok) throw new Error('Error al cargar los vehículos');
+    
             const data = await response.json();
             const tableBody = document.getElementById('vehiculosTableBody');
             tableBody.innerHTML = '';
-
+    
             if (data.length === 0) {
                 mostrarAlerta('info', 'No se encontraron vehículos activos.');
                 return;
             }
-
+    
             data.forEach(vehiculo => {
+                // Crear una lista de servicios
+                const serviciosHTML = vehiculo.servicios.map(servicio => `
+                    <li>${servicio.nombre} - (${servicio.categoria.nombre})</li>
+                `).join('');
+    
                 const row = `
                     <tr align="center">
                         <td>${vehiculo.modelo}</td>
@@ -128,16 +133,20 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
                                 <i class="fas fa-plus"></i> Asignar Servicio
                             </button>
                         </td>
+                        <td>
+                            <ul>${serviciosHTML}</ul> <!-- Lista de servicios -->
+                        </td>
                     </tr>`;
                 tableBody.innerHTML += row;
             });
-            
-
+    
             agregarEventos();
         } catch (error) {
             console.error(error);
+            mostrarAlerta('error', 'Hubo un error al cargar los vehículos.');
         }
     }
+    
 
     document.getElementById('formRegistrarVehiculo').addEventListener('submit', async (event) => {
         event.preventDefault();
