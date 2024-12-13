@@ -114,6 +114,8 @@
                                 <th>Rol</th>
                                 <th>Estado</th>
                                 <th>Editar</th>
+                                <th>Asignar Vehiculo</th>
+                                <th>Vehiculos</th>
                             </tr>
                         </thead>
                         <tbody id="usuariosTableBody">
@@ -164,7 +166,7 @@
                                 <label for="contrasena" class="col-form-label">Contraseña:</label>
                             </div>
                             <!-- Rol -->
-                            <div class="form-group">
+                            <div class="form-group" style="display: none;">
                                 <select class="form-control" id="rol" name="rol" required>
                                     <option value="admin">Administrador</option>
                                     <option value="usuario">Usuario</option>
@@ -261,6 +263,58 @@
            </div>
        </div>
     </div>
+
+
+
+    <!-- Modal asignarServicio -->
+    <div class="modal fade asignarServicio" id="asignarServicio" tabindex="-1" role="dialog" aria-labelledby="asignarServicioLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="asignarServicioLabel">Asignar Servicio</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAsignarServicio">
+                        <input type="hidden" id="idVehiculo" name="idVehiculo">
+                        <div class="form-group">
+                            <select class="form-control" id="vehiculoSelect" name="servicio">
+                                <option value="" selected>Seleccione un servicio</option>
+                            </select>
+                            <label for="servicio" class="col-form-label">Servicio:</label>
+                        </div> 
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Servicios -->
+<div class="modal fade" id="modalServicios" tabindex="-1" role="dialog" aria-labelledby="modalServiciosLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalServiciosLabel">Lista de Servicios</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="listaServicios" class="list-group" style="color: black;">
+                    <!-- Los servicios se llenarán aquí -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     
 <!-- Scripts utilizados -->

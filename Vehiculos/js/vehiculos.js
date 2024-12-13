@@ -126,7 +126,8 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
                         </td>
                         <td>
                             <button class="btn btn-sm btn-secondary btnAsignarServicio" data-id="${vehiculo.id}">
-                                <i class="fas fa-plus"></i> Asignar Servicio
+                                <i class="fas fa-plus"></i>                        <i class="fa-solid fa-toolbox"></i>
+
                             </button>
                         </td>
                         <td>
@@ -280,6 +281,7 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
 
     async function asignarServicio(vehiculoId, servicioId) {
         try {
+            // Realizar la solicitud PUT para asignar el servicio
             const response = await fetch(`${API_URL_VEHICULOS}/${vehiculoId}/asignar-servicio/${servicioId}`, {
                 method: 'PUT',
                 headers: {
@@ -292,15 +294,28 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
                 return;
             }
     
+            // Mostrar alerta de éxito
             mostrarAlerta('success', 'Servicio asignado exitosamente.');
-            cargarVehiculos(); // Actualizar la tabla
+    
+            // Recargar la tabla de vehículos
+            cargarVehiculos();
+    
+            // Limpiar el formulario y reiniciar el select a su opción por defecto
+            document.getElementById('formAsignarServicio').reset();  // Resetea el formulario
+    
+            // Reiniciar el select a la opción por defecto
+            const selectServicio = document.getElementById('serviciove');
+            selectServicio.value = ""; // Esto selecciona el valor vacío que corresponde a la opción por defecto
+            selectServicio.innerHTML = '<option value="" selected>Seleccione un servicio</option>'; // Reinicia las opciones
+            
+            // Si deseas cargar los servicios nuevamente después de asignar, llama a cargarServicios aquí
+            cargarServicios();
+            
         } catch (error) {
             mostrarAlerta('error', 'Hubo un error al intentar asignar el servicio.');
             console.error(error);
         }
     }
-    
-    
 
     // Editar un vehículo
     document.body.addEventListener('click', function (event) {
@@ -478,4 +493,5 @@ document.getElementById('filterState').addEventListener('change', filtrarUsuario
 
     cargarVehiculos();
     cargarServicios();
+    
 });

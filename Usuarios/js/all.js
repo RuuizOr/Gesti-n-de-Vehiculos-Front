@@ -21,24 +21,20 @@ function mostrarAlerta(mensaje, tipo = 'info') {
     }, 5000);
 }
 
-
 // Función para obtener y mostrar los usuarios
 async function obtenerUsuarios() {
-    // Obtener el token JWT desde localStorage
     const token = localStorage.getItem('jwt');
     console.log("Token JWT obtenido:", token);
 
-    // Verificar si el token existe
     if (!token) {
         console.log('No se encontró el token en el localStorage');
         mostrarAlerta('No se encontró el token. Por favor, inicie sesión.', 'error');
         return;
     }
 
-    const url = 'http://localhost:8080/usuarios/all'; // URL de la API
+    const url = 'http://localhost:8080/usuarios/all';
 
     try {
-        // Realizar la solicitud GET con el token en el encabezado
         const response = await fetch(url, {
             method: 'GET',
             headers: {
@@ -48,27 +44,19 @@ async function obtenerUsuarios() {
             }
         });
 
-        // Verificar si la respuesta fue exitosa
         if (!response.ok) {
             throw new Error('Error en la red: ' + response.statusText);
         }
 
-        // Convertir la respuesta a JSON
         const data = await response.json();
         console.log('Datos de los usuarios:', data);
 
-        // Llenar la tabla con los datos de los usuarios
         const usuariosTableBody = document.getElementById('usuariosTableBody');
-        usuariosTableBody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevos datos
+        usuariosTableBody.innerHTML = '';
         let rol;
 
-        // Iterar sobre los datos de los usuarios y crear filas dinámicamente
         data.result.forEach(usuario => {
-            if (usuario.admin === "ROLE_USER") {
-                rol = "Usuario";
-            } else if (usuario.admin === "ROLE_ADMIN") {
-                rol = "Administrador";
-            }
+            rol = usuario.admin === "ROLE_USER" ? "Usuario" : "Administrador";
 
             const row = `
                 <tr align="center">
@@ -100,54 +88,132 @@ async function obtenerUsuarios() {
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary btnAsignarVehiculo" data-id="${usuario.id}">
+                            Asignar Vehículo
+                        </button>
+                    </td>
                 </tr>
             `;
-            // Insertar la fila en la tabla
             usuariosTableBody.insertAdjacentHTML('beforeend', row);
         });
+
+        agregarEventos();
     } catch (error) {
-        // Manejar errores de la solicitud
         console.error('Hubo un problema con la solicitud:', error);
         mostrarAlerta('Ocurrió un error al intentar obtener los datos de los usuarios.', 'error');
     }
 }
 
-// Llamar la función para obtener los datos de los usuarios al cargar la página
-obtenerUsuarios();
+// Función para cargar vehículos en el select
+async function cargarVehiculos() {
+    const token = localStorage.getItem('jwt');
+    const API_URL_VEHICULOS = 'http://localhost:8080/vehiculos/all';
+
+    try {
+        const response = await fetch(API_URL_VEHICULOS, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error('Error al cargar los vehículos.');
+
+        const data = await response.json();
+        const selectVehiculos = document.getElementById('vehiculoSelect');
+
+        selectVehiculos.innerHTML = '<option value="">Seleccione un vehículo</option>';
+        data.forEach(vehiculo => {
+            const option = document.createElement('option');
+            option.value = vehiculo.id;
+            option.textContent = `${vehiculo.modelo} (${vehiculo.marca})`;
+            selectVehiculos.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error al cargar los vehículos:', error);
+    }
+}
+
+// Función para asignar vehículo a un usuario
+async function asignarVehiculo(idUsuario, idVehiculo) {
+    const token = localStorage.getItem('jwt');
+    const API_URL_ASIGNAR = 'http://localhost:8080/usuarios/asignarVehiculo';
+
+    try {
+        const response = await fetch(API_URL_ASIGNAR, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ idUsuario, idVehiculo })
+        });
+
+        if (!response.ok) throw new Error('Error al asignar el vehículo.');
+
+        mostrarAlerta('Vehículo asignado exitosamente.', 'success');
+    } catch (error) {
+        console.error('Error al asignar el vehículo:', error);
+        mostrarAlerta('Hubo un error al asignar el vehículo.', 'error');
+    }
+}
+
+// Función para manejar eventos de botones
+function agregarEventos() {
+    document.body.addEventListener('click', function (event) {
+        if (event.target.closest('.btnAsignarVehiculo')) {
+            const btn = event.target.closest('.btnAsignarVehiculo');
+            const idUsuario = btn.getAttribute('data-id');
+            document.getElementById('idUsuario').value = idUsuario;
+            cargarVehiculos();
+            $('#asignarServicio').modal('show');
+        }
+    });
+
+    document.getElementById('formAsignarServicio').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const idUsuario = document.getElementById('idUsuario').value;
+        const idVehiculo = document.getElementById('vehiculoSelect').value;
+
+        if (!idVehiculo) {
+            mostrarAlerta('Por favor, seleccione un vehículo.', 'error');
+            return;
+        }
+
+        asignarVehiculo(idUsuario, idVehiculo);
+        $('#asignarServicio').modal('hide');
+    });
+}
 
 // Función para filtrar los usuarios
 function filtrarUsuarios() {
     const nombre = document.getElementById('filterName').value.toLowerCase();
     const estado = document.getElementById('filterState').value;
 
-    // Obtener todas las filas de la tabla
     const filas = document.querySelectorAll('#usuariosTableBody tr');
 
-    // Iterar sobre todas las filas
     filas.forEach(fila => {
         const nombreUsuario = fila.cells[0].textContent.toLowerCase();
-        // Obtener el estado desde el botón dentro de la fila
-        const estadoBoton = fila.querySelector('button').getAttribute('data-estado'); // Obtener el estado del botón
+        const estadoBoton = fila.querySelector('button').getAttribute('data-estado');
 
-        // Comprobar si la fila cumple con los filtros
         const coincideNombre = nombreUsuario.includes(nombre);
 
-        let coincideEstado = true; // Si no se selecciona estado, coincide siempre
+        let coincideEstado = true;
         if (estado) {
-            // Compara si el estado seleccionado corresponde con el estado del usuario
             coincideEstado = (estado === 'Activo' && estadoBoton === 'true') ||
                              (estado === 'Inactivo' && estadoBoton === 'false');
         }
 
-        // Mostrar u ocultar la fila según los filtros
-        if (coincideNombre && coincideEstado) {
-            fila.style.display = ''; // Mostrar la fila
-        } else {
-            fila.style.display = 'none'; // Ocultar la fila
-        }
+        fila.style.display = coincideNombre && coincideEstado ? '' : 'none';
     });
 }
 
 // Agregar eventos a los filtros
 document.getElementById('filterName').addEventListener('input', filtrarUsuarios);
 document.getElementById('filterState').addEventListener('change', filtrarUsuarios);
+
+// Llamar las funciones al cargar la página
+obtenerUsuarios();
+
+
+
+
+
