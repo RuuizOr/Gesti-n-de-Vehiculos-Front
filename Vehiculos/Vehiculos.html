@@ -85,7 +85,7 @@
                         </select>
                     </div>
                     <div class="col-md-3">
-                        <button type="button" id="registrar" class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarVehiculo" style="display: flex; justify-content: space-evenly; align-items: center">
+                        <button type="button" class="btn btnIcono w-100" data-toggle="modal" data-target="#registrarVehiculo" style="display: flex; justify-content: space-evenly; align-items: center">
                             Registrar vehículo <i class="fa-solid fa-chalkboard-user"></i>
                         </button>
                     </div>
@@ -101,6 +101,7 @@
                                 <th>Color</th>
                                 <th>Estado</th>
                                 <th>Editar</th>
+                                <th>Servicios</th>
                             </tr>
                         </thead>
                         <tbody id="vehiculosTableBody"></tbody>
@@ -111,7 +112,7 @@
     </div>
 
     <!-- Modal de registro -->
-    <div class="modal" id="registrarVehiculo" tabindex="-1" role="dialog" aria-labelledby="registrarVehiculoLabel" aria-hidden="true">
+    <div class="modal registrarVehiculo" id="registrarVehiculo" tabindex="-1" role="dialog" aria-labelledby="registrarVehiculoLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -133,9 +134,10 @@
                         <div class="form-group">
                             <input type="text" class="form-control" id="color" name="color" maxlength="50" placeholder=" " required>
                             <label for="color" class="col-form-label">Color:</label>
-                        </div>
+                        </div>   
+                        
                         <div class="modal-footer">
-                            <button type="submit" id="registrar2" class="btn btn-primary">Registrar</button>
+                            <button type="submit" class="btn btn-primary">Registrar</button>
                         </div>
                     </form>
                 </div>
@@ -144,7 +146,7 @@
     </div>
 
     <!-- Modal de modificar vehículo -->
-<div class="modal fade" id="modificarVehiculo" tabindex="-1" role="dialog" aria-labelledby="modificarVehiculoLabel" aria-hidden="true">
+<div class="modal fade modificarVehiculo" id="modificarVehiculo" tabindex="-1" role="dialog" aria-labelledby="modificarVehiculoLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -165,7 +167,7 @@
                     
                     <!-- Marca -->
                     <div class="form-group">
-                        <input type="text" class="form-control" id="marca" name="marcaMod" maxlength="50" placeholder=" " required>
+                        <input type="text" class="form-control" id="marcaMod" name="marcaMod" maxlength="50" placeholder=" " required>
                         <label for="marcaMod" class="col-form-label">Marca:</label>
                     </div>
                     
@@ -201,14 +203,41 @@
                         <input id="estadoServicio" name="estadoServicio" type="hidden">
                         <h6>¿Estás seguro de actualizar el estado?</h6>
                         <div class="modal-footer custom-modal-footer">
-                            <button type="submit" id="btn"  class="btn btn-primary">Actualizar</button>
+                            <button type="submit" class="btn btn-primary">Actualizar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    
+
+    <--Modal asignarServicio ->
+    <div class="modal fade asignarServicio" id="asignarServicio" tabindex="-1" role="dialog" aria-labelledby="asignarServicioLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="asignarServicioLabel">Asignar Servicio</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAsignarServicio">
+                        <input type="hidden" id="idVehiculo" name="idVehiculo">
+                        <div class="form-group">
+                            <select class="form-control" id="serviciove" name="servicio">
+                                <option value="">Seleccione un servicio</option>
+                            </select>
+                            <label for="servicio" class="col-form-label">Servicio:</label>
+                        </div> 
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts utilizados -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

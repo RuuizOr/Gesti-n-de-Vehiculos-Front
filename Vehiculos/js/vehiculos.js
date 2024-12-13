@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const API_URL_VEHICULOS = "http://localhost:8080/vehiculos";
+    const API_URL_SERVICIOS = "http://localhost:8080/servicios"; // URL base para los servicios
+
     const token = localStorage.getItem('jwt');
 
     if (!token) {
@@ -40,6 +42,50 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
+
+    // Función para cargar los servicios activos en el <select>
+    async function cargarServicios() {
+        try {
+            const response = await fetch(`${API_URL_SERVICIOS}/activos`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+    
+            if (!response.ok) throw new Error('Error al cargar los servicios');
+    
+            const data = await response.json(); // Deserializa el JSON
+            const servicios = data.result; // Accede al array de servicios
+            const selectServicios = document.getElementById('serviciove');
+    
+            // Limpia las opciones anteriores
+            selectServicios.innerHTML = '<option value="">Seleccione un servicio</option>';
+    
+            // Agrega las nuevas opciones
+            servicios.forEach(servicio => {
+                const option = document.createElement('option');
+                option.value = servicio.id; // ID del servicio
+                option.textContent = servicio.nombre; // Nombre del servicio
+                selectServicios.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Error al cargar los servicios:', error);
+            mostrarAlerta('error', 'Hubo un error al cargar los servicios.');
+        }
+    }
+    
+    
+    
+    // Llama a cargarServicios cuando se abra el modal
+    const modalRegistrarVehiculo = document.getElementById('registrarVehiculo');
+
+// Asegúrate de que el evento sea detectado
+modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
+    console.log('El modal se está mostrando');
+    cargarServicios();
+});
+
+
+
+
     // Cargar vehículos en la tabla
     async function cargarVehiculos() {
         try {
@@ -65,23 +111,27 @@ document.addEventListener('DOMContentLoaded', function () {
                         <td>${vehiculo.marca}</td>
                         <td>${vehiculo.color}</td>
                         <td>
-
-                            <button id="botonStatus" class="btn btn-sm ${vehiculo.status ? 'btn-success' : 'btn-danger'} cambiarEstado" 
-                                    data-id="${vehiculo.id}" data-status="${vehiculo.status}">
-
+                            <button class="btn btn-sm ${vehiculo.status ? 'btn-success' : 'btn-danger'} cambiarEstado" 
+                                    data-id="${vehiculo.id}" data-status="${vehiculo.status}"><i class="fas fa-sync-alt"></i>
                                 ${vehiculo.status ? 'Activo' : 'Inactivo'}
                             </button>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-primary btnIcono" 
+                            <button class="btn btn-sm btn-primary btnIcono btnEditar" 
                                     data-id="${vehiculo.id}" data-modelo="${vehiculo.modelo}" 
                                     data-marca="${vehiculo.marca}" data-color="${vehiculo.color}">
                                 <i class="fas fa-edit"></i>
                             </button>
                         </td>
+                        <td>
+                            <button class="btn btn-sm btn-secondary btnAsignarServicio" data-id="${vehiculo.id}">
+                                <i class="fas fa-plus"></i> Asignar Servicio
+                            </button>
+                        </td>
                     </tr>`;
                 tableBody.innerHTML += row;
             });
+            
 
             agregarEventos();
         } catch (error) {
@@ -89,21 +139,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Registrar un vehículo
     document.getElementById('formRegistrarVehiculo').addEventListener('submit', async (event) => {
         event.preventDefault();
-
+    
         const modelo = document.getElementById('modelo').value.trim();
         const marca = document.getElementById('marca').value.trim();
         const color = document.getElementById('color').value.trim();
-
+        const servicioId = document.getElementById('serviciove').value;
+    
         if (!modelo || !marca || !color) {
             mostrarAlerta('error', 'Por favor, complete todos los campos del formulario.');
             return;
         }
-
+    
         try {
-            const response = await fetch(`${API_URL_VEHICULOS}/registrar`, {
+            // Registrar el vehículo
+            const registrarResponse = await fetch(`${API_URL_VEHICULOS}/registrar`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -111,48 +162,126 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: JSON.stringify({ modelo, marca, color, status: true })
             });
-
-            if (response.ok) {
-                mostrarAlerta('success', 'Vehículo registrado exitosamente');
-                cargarVehiculos();
-                const modal = document.getElementById('registrarVehiculo');
-                    modal.classList.remove('show');
-                    modal.style.display = 'none';
-                    const backdrop = document.querySelector('.modal-backdrop');
-                    if (backdrop) {
-                        backdrop.remove();
-                    }
-            } else {
+    
+            if (!registrarResponse.ok) {
                 mostrarAlerta('error', 'Error al registrar el vehículo.');
+                return;
             }
+    
+            const nuevoVehiculo = await registrarResponse.json(); // Suponiendo que el API retorna el vehículo registrado con su ID
+            const vehiculoId = nuevoVehiculo.id;
+    
+            mostrarAlerta('success', 'Vehículo registrado exitosamente.');
+    
+            // Si se seleccionó un servicio, asignarlo
+            if (servicioId) {
+                const asignarResponse = await fetch(`${API_URL_VEHICULOS}/${vehiculoId}/asignar-servicio/${servicioId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+    
+                if (!asignarResponse.ok) {
+                    mostrarAlerta('error', 'Error al asignar el servicio al vehículo.');
+                    return;
+                }
+    
+                mostrarAlerta('success', 'Servicio asignado exitosamente al vehículo.');
+            }
+    
+            // Recargar la lista de vehículos
+            cargarVehiculos();
+    
+            // Cerrar el modal y limpiar el formulario
+            const modal = document.getElementById('registrarVehiculo');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+            document.getElementById('formRegistrarVehiculo').reset();
         } catch (error) {
-            mostrarAlerta('error', 'Hubo un error al intentar registrar el vehículo.');
+            mostrarAlerta('error', 'Hubo un error al intentar procesar las solicitudes.');
             console.error(error);
         }
     });
-
-    // Evitar que los modales se solapen
-    $('#registrarVehiculo, #modificarVehiculo').on('show.bs.modal', function () {
-        $('.modal').not(this).modal('hide'); // Ocultar cualquier otro modal abierto
+    
+    document.getElementById('formAsignarServicio').addEventListener('submit', function (event) {
+        event.preventDefault();
+    
+        const vehiculoId = document.getElementById('idVehiculo').value;
+        const servicioId = document.getElementById('serviciove').value;
+    
+        if (!servicioId) {
+            mostrarAlerta('error', 'Por favor, seleccione un servicio.');
+            return;
+        }
+    
+        // Llamar a la función para asignar el servicio
+        asignarServicio(vehiculoId, servicioId);
+    
+        // Cerrar el modal
+        $('#asignarServicio').modal('hide');
     });
+    
+
+    document.body.addEventListener('click', function (event) {
+        if (event.target.closest('.btnAsignarServicio')) {
+            const btn = event.target.closest('.btnAsignarServicio');
+            const vehiculoId = btn.getAttribute('data-id');
+    
+            // Abrir el modal y pasar el ID del vehículo
+            document.getElementById('idVehiculo').value = vehiculoId;
+            $('#asignarServicio').modal('show');
+        }
+    });
+    
+
+    async function asignarServicio(vehiculoId, servicioId) {
+        try {
+            const response = await fetch(`${API_URL_VEHICULOS}/${vehiculoId}/asignar-servicio/${servicioId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            if (!response.ok) {
+                mostrarAlerta('error', 'Error al asignar el servicio.');
+                return;
+            }
+    
+            mostrarAlerta('success', 'Servicio asignado exitosamente.');
+            cargarVehiculos(); // Actualizar la tabla
+        } catch (error) {
+            mostrarAlerta('error', 'Hubo un error al intentar asignar el servicio.');
+            console.error(error);
+        }
+    }
+    
+    
 
     // Editar un vehículo
     document.body.addEventListener('click', function (event) {
-        if (event.target.closest('.btnIcono')) {
-            const btn = event.target.closest('.btnIcono');
+        if (event.target.closest('.btnEditar')) {
+            const btn = event.target.closest('.btnEditar');
+            // Abrir el modal de editar
             const id = btn.getAttribute('data-id');
             const modelo = btn.getAttribute('data-modelo');
             const marca = btn.getAttribute('data-marca');
             const color = btn.getAttribute('data-color');
-
+    
             document.getElementById('idMod').value = id;
             document.getElementById('modeloMod').value = modelo;
             document.getElementById('marcaMod').value = marca;
             document.getElementById('colorMod').value = color;
-
+    
             $('#modificarVehiculo').modal('show');
         }
     });
+    
 
     // Guardar cambios al editar vehículo
 document.getElementById('formModificarVehiculo').addEventListener('submit', async (event) => {
@@ -256,7 +385,7 @@ document.getElementById('formModificarVehiculo').addEventListener('submit', asyn
             });
     
             if (response.ok) {
-                mostrarAlerta('success', 'Estado del vehículo cambiado exitosamente.');
+                mostrarAlerta('success', 'Estado cambiado exitosamente.');
                 cargarVehiculos();
             } else {
                 mostrarAlerta('error', 'Error al cambiar el estado del vehículo.');
@@ -309,4 +438,5 @@ document.getElementById('filterState').addEventListener('change', filtrarUsuario
     
 
     cargarVehiculos();
+    cargarServicios();
 });
