@@ -126,7 +126,8 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
                         </td>
                         <td>
                             <button class="btn btn-sm btn-secondary btnAsignarServicio" data-id="${vehiculo.id}">
-                                <i class="fas fa-plus"></i> Asignar Servicio
+                                <i class="fas fa-plus"></i>                        <i class="fa-solid fa-toolbox"></i>
+
                             </button>
                         </td>
                         <td>
