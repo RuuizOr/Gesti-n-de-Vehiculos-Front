@@ -1,181 +1,112 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const API_URL = "http://localhost:8080/vehiculos";
-    const tableBody = document.getElementById('vehiculosTableBody');
+// Función para decodificar el JWT y obtener el usuario ID
+const jwtToken = localStorage.getItem('jwt');
+console.log("Token JWT obtenido:", jwtToken);
 
-    // Cargar vehículos en la tabla
-    async function cargarVehiculos() {
-        try {
-            const response = await fetch(`${API_URL}/activos`);
-            if (!response.ok) throw new Error('Error al cargar los vehículos');
+const usuarioId = localStorage.getItem('userId'); // ID del usuario, puede ser dinámico según el contexto (como `localStorage.getItem('userId')`)
 
-            const data = await response.json();
-            tableBody.innerHTML = ''; // Limpiar la tabla
 
-            data.forEach(vehiculo => {
-                const row = `
-                    <tr align="center">
-                        <td>${vehiculo.modelo}</td>
-                        <td>${vehiculo.marca}</td>
-                        <td>${vehiculo.color}</td>
-                        <td>
-                            <button class="btn btn-sm ${vehiculo.status ? 'btn-success' : 'btn-danger'} cambiarEstado" 
-                                    data-id="${vehiculo.id}" 
-                                    data-status="${vehiculo.status}">
-                                ${vehiculo.status ? 'Activo' : 'Inactivo'}
-                            </button>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-primary btnIcono" 
-                                    data-id="${vehiculo.id}" 
-                                    data-modelo="${vehiculo.modelo}" 
-                                    data-marca="${vehiculo.marca}" 
-                                    data-color="${vehiculo.color}" 
-                                    data-toggle="modal" 
-                                    data-target="#modificarVehiculo">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </td>
-                    </tr>`;
-                tableBody.innerHTML += row;
-            });
-            agregarEventos();
-        } catch (error) {
-            console.error('Error al cargar los vehículos:', error);
-        }
+// Función para obtener los vehículos del usuario
+function obtenerVehiculos() {
+    if (!usuarioId) {
+        alert("No se pudo obtener el ID del usuario desde el token.");
+        return;
     }
 
-    // Filtrar por nombre
-  filterName.addEventListener("input", () => {
-    const searchTerm = filterName.value.trim().toLowerCase();
-    const rows = tableBody.querySelectorAll("tr");
-    rows.forEach((row) => {
-      const nombre = row.children[0].textContent.trim().toLowerCase();
-      if (nombre.includes(searchTerm)) {
-        row.style.display = ""; // Mostrar
-      } else {
-        row.style.display = "none"; // Ocultar
-      }
+    const url = 'http://localhost:8080/usuarios/id';  // URL de la API para obtener el usuario y sus vehículos
+
+    // Cuerpo de la petición
+    const body = JSON.stringify({ id: usuarioId });
+
+    // Configuración de la petición
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}`
+    };
+
+    // Realizar la petición POST
+    fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: body
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP Error: ${response.status}`);
+        }
+        return response.json();  // Procesar la respuesta como JSON
+    })
+    .then(data => {
+        // Llenar la tabla con los vehículos obtenidos
+        const vehiculos = data.vehiculos;  // Obtener los vehículos de la respuesta
+        llenarTablaVehiculos(vehiculos);
+    })
+    .catch(error => {
+        console.error('Error al obtener los datos:', error);
+        alert('Hubo un error al obtener los datos de los vehículos. Verifica tu conexión o el token de autenticación.');
     });
-  });
+}
 
+// Función para llenar la tabla con los datos de los vehículos
+function llenarTablaVehiculos(vehiculos) {
+    const tablaCuerpo = document.getElementById('vehiculosTableBody');
+    tablaCuerpo.innerHTML = '';  // Limpiar la tabla antes de llenarla
 
-    // Agregar nuevo vehículo
-    const formRegistrar = document.getElementById("formRegistrarVehiculo");
-    formRegistrar.addEventListener("submit", async function (event) {
-        event.preventDefault();
+    // Iterar sobre los vehículos y crear las filas de la tabla
+    vehiculos.forEach(vehiculo => {
+        const fila = document.createElement('tr');
 
-        const modelo = document.getElementById("modelo").value.trim();
-        const marca = document.getElementById("marca").value.trim();
-        const color = document.getElementById("color").value.trim();
+        // Modelo
+        const tdModelo = document.createElement('td');
+        tdModelo.textContent = vehiculo.modelo;
+        fila.appendChild(tdModelo);
 
-        if (modelo && marca && color) {
-            try {
-                const response = await fetch(`${API_URL}/registrar`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ modelo, marca, color, status: true }),
-                });
+        // Marca
+        const tdMarca = document.createElement('td');
+        tdMarca.textContent = vehiculo.marca;
+        fila.appendChild(tdMarca);
 
-                if (response.ok) {
-                    formRegistrar.reset();
-                    $('#registrarVehiculo').modal('hide'); // Cierra el modal después del registro
-                    cargarVehiculos(); // Recarga la tabla
-                } else {
-                    console.error("Error al registrar el vehículo. Verifique los datos.");
-                }
-            } catch (error) {
-                console.error("Error en la solicitud:", error);
-            }
+        // Color
+        const tdColor = document.createElement('td');
+        tdColor.textContent = vehiculo.color;
+        fila.appendChild(tdColor);
+
+        // Estado
+        const tdEstado = document.createElement('td');
+        tdEstado.textContent = vehiculo.status ? 'Activo' : 'No Activo';
+        fila.appendChild(tdEstado);
+
+        // Agregar la fila a la tabla
+        tablaCuerpo.appendChild(fila);
+    });
+}
+
+// Filtrar la tabla según el nombre y el estado seleccionado
+document.getElementById('filterName').addEventListener('input', filtrarTablaVehiculos);
+document.getElementById('filterState').addEventListener('change', filtrarTablaVehiculos);
+
+function filtrarTablaVehiculos() {
+    const nombreFiltro = document.getElementById('filterName').value.toLowerCase();
+    const estadoFiltro = document.getElementById('filterState').value;
+
+    const filas = document.getElementById('vehiculosTableBody').getElementsByTagName('tr');
+    
+    Array.from(filas).forEach(fila => {
+        const nombreVehiculo = fila.cells[0].textContent.toLowerCase(); // Modelo
+        const estadoVehiculo = fila.cells[3].textContent.toLowerCase(); // Estado
+        
+        // Comprobar si la fila debe mostrarse
+        const mostrarPorNombre = nombreVehiculo.includes(nombreFiltro);
+        const mostrarPorEstado = estadoFiltro === '' || estadoVehiculo.includes(estadoFiltro.toLowerCase());
+        
+        if (mostrarPorNombre && mostrarPorEstado) {
+            fila.style.display = '';
         } else {
-            console.error("Por favor, complete todos los campos.");
+            fila.style.display = 'none';
         }
     });
+}
 
-    // Editar un vehículo existente
-    const formModificarVehiculo = document.getElementById("formModificarVehiculo");
-    formModificarVehiculo.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const id = document.getElementById("idMod").value;
-        const modelo = document.getElementById("modeloMod").value.trim();
-        const marca = document.getElementById("marcaMod").value.trim();
-        const color = document.getElementById("colorMod").value.trim();
-
-        if (id && modelo && marca && color) {
-            try {
-                const response = await fetch(`${API_URL}/actualizar`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id, modelo, marca, color, status: true }),
-                });
-
-                if (response.ok) {
-                    formModificarVehiculo.reset();
-                    $('#modificarVehiculo').modal('hide'); // Cierra el modal después de la edición
-                    cargarVehiculos(); // Recarga la tabla
-                } else {
-                    console.error("Error al modificar el vehículo. Verifique los datos.");
-                }
-            } catch (error) {
-                console.error("Error en la solicitud:", error);
-            }
-        } else {
-            console.error("Por favor, complete todos los campos.");
-        }
-    });
-
-    // Cambiar estado de un vehículo
-    document.getElementById("formModificarEstado").addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const id = document.getElementById("idServicio").value;
-        const status = document.getElementById("estadoServicio").value === "true";
-
-        try {
-            const response = await fetch(`${API_URL}/cambiar-estado/${id}?status=${!status}`, {
-                method: "PUT",
-            });
-
-            if (response.ok) {
-                $("#modificarEstadoServicio").modal("hide");
-                cargarVehiculos();
-            } else {
-                console.error("Error al actualizar el estado del vehículo.");
-            }
-        } catch (error) {
-            console.error("Error en la solicitud:", error);
-        }
-    });
-
-    // Agregar eventos a botones
-    function agregarEventos() {
-        // Eventos de cambiar estado
-        document.querySelectorAll('.cambiarEstado').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const id = this.dataset.id;
-                const status = this.dataset.status === "true";
-                document.getElementById('idServicio').value = id;
-                document.getElementById('estadoServicio').value = status;
-                $('#modificarEstadoServicio').modal('show');
-            });
-        });
-
-        // Eventos de modificar vehículo
-        document.querySelectorAll('.btnIcono').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const id = this.dataset.id;
-                const modelo = this.dataset.modelo;
-                const marca = this.dataset.marca;
-                const color = this.dataset.color;
-
-                document.getElementById('idMod').value = id;
-                document.getElementById('modeloMod').value = modelo;
-                document.getElementById('marcaMod').value = marca;
-                document.getElementById('colorMod').value = color;
-            });
-        });
-    }
-
-    // Inicialización: cargar vehículos
-    cargarVehiculos();
-});
+// Llamar a la función para obtener y mostrar los vehículos cuando se cargue la página
+window.onload = function() {
+    obtenerVehiculos();
+};

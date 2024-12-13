@@ -1,253 +1,108 @@
-document.addEventListener('DOMContentLoaded', function () {
-    // URLs de la API
-    const API_URL_SERVICIOS = "http://localhost:8080/servicios";
-    const API_URL_CATEGORIAS = "http://localhost:8080/CategoriasDeServicios/activos";
+// Obtén el JWT (esto depende de cómo obtengas el token, por ejemplo, desde localStorage o cookies)
+const jwtToken = localStorage.getItem('jwt'); // O ajusta la forma en que obtienes el JWT
 
-    const tableBody = document.getElementById("serviciosTableBody");
-    const categoriaSelect = document.querySelector("#categoria");
-    const categoriaSelectMod = document.querySelector("#categoriaMod");
+function obtenerServicios() {
+    const usuarioId = localStorage.getItem('userId'); // ID del usuario, puede ser dinámico según el contexto (como `localStorage.getItem('userId')`)
+    const url = 'http://localhost:8080/usuarios/id';
 
-    // Función para cargar las categorías y llenar el <select> de registro y modificación
-    async function cargarCategorias() {
-        try {
-            const response = await fetch(API_URL_CATEGORIAS);
-            const data = await response.json();
+    const body = JSON.stringify({ id: usuarioId });
+    const jwtToken = localStorage.getItem('jwt'); // Asegúrate de obtener el JWT correctamente
 
-            if (data && Array.isArray(data.result)) {
-                data.result.forEach(categoria => {
-                    const option = document.createElement("option");
-                    option.value = categoria.id;
-                    option.textContent = categoria.nombre;
+    // Verifica si no hay to
 
-                    // Agregar categorías a ambos selects
-                    categoriaSelect.appendChild(option);
-                    categoriaSelectMod.appendChild(option.cloneNode(true));
-                });
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${jwtToken}` // Asegúrate de enviar el token JWT en la cabecera
+    };
+
+    fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: body
+    })
+    .then(response => {
+        if (!response.ok) {
+            if (response.status === 403) {
+                alert('Acceso denegado. Verifica tu autenticación y permisos.');
             } else {
-                console.error("No se encontraron categorías.");
+                alert('Error al obtener los datos. Código de error: ' + response.status);
             }
-        } catch (error) {
-            console.error("Error al cargar las categorías:", error);
+            throw new Error(`HTTP Error: ${response.status}`);
         }
-    }
-
-    // Filtrar por nombre
-  filterName.addEventListener("input", () => {
-    const searchTerm = filterName.value.trim().toLowerCase();
-    const rows = tableBody.querySelectorAll("tr");
-    rows.forEach((row) => {
-      const nombre = row.children[0].textContent.trim().toLowerCase();
-      if (nombre.includes(searchTerm)) {
-        row.style.display = ""; // Mostrar
-      } else {
-        row.style.display = "none"; // Ocultar
-      }
+        return response.json(); // Procesar la respuesta como JSON
+    })
+    .then(data => {
+        const servicios = data.vehiculos.flatMap(vehiculo => vehiculo.servicios);
+        llenarTabla(servicios); // Llenar la tabla con los datos
+    })
+    .catch(error => {
+        console.error('Error al obtener los datos:', error);
+        alert('Hubo un error al obtener los datos.');
     });
-  });
+}
 
-  // Filtrar por estado
-  filterState.addEventListener("change", () => {
-    const selectedState = filterState.value.toLowerCase();
-    const rows = tableBody.querySelectorAll("tr");
-    rows.forEach((row) => {
-      const estado = row.children[3].textContent.trim().toLowerCase();
-      if (
-        selectedState === "" || // Mostrar todos si no hay selección
-        (selectedState === "activo" && estado === "activo") ||
-        (selectedState === "noactivo" && estado === "inactivo")
-      ) {
-        row.style.display = ""; // Mostrar
-      } else {
-        row.style.display = "none"; // Ocultar
-      }
+
+// Función para llenar la tabla con los datos de los servicios
+function llenarTabla(servicios) {
+    const tablaCuerpo = document.getElementById('serviciosTableBody');
+    tablaCuerpo.innerHTML = ''; // Limpiar la tabla antes de llenarla
+
+    // Iterar sobre los servicios y crear las filas de la tabla
+    servicios.forEach(servicio => {
+        const fila = document.createElement('tr');
+
+        // Nombre del servicio
+        const tdNombre = document.createElement('td');
+        tdNombre.textContent = servicio.nombre;
+        fila.appendChild(tdNombre);
+
+        // Descripción
+        const tdDescripcion = document.createElement('td');
+        tdDescripcion.textContent = servicio.descripcion;
+        fila.appendChild(tdDescripcion);
+
+        // Categoría
+        const tdCategoria = document.createElement('td');
+        tdCategoria.textContent = servicio.categoria.nombre;
+        fila.appendChild(tdCategoria);
+
+        // Estado
+        const tdEstado = document.createElement('td');
+        tdEstado.textContent = servicio.status ? 'Activo' : 'No Activo';
+        fila.appendChild(tdEstado);
+
+        // Agregar la fila a la tabla
+        tablaCuerpo.appendChild(fila);
     });
-  });
+}
 
-    // Función para cargar y mostrar los servicios
-    async function mostrarServicios() {
-        try {
-            const response = await fetch(`${API_URL_SERVICIOS}/all`);
-            const data = await response.json();
+// Filtrar la tabla según el nombre y el estado seleccionado
+document.getElementById('filterName').addEventListener('input', filtrarTabla);
+document.getElementById('filterState').addEventListener('change', filtrarTabla);
 
-            if (data.type === "SUCCESS" && Array.isArray(data.result)) {
-                tableBody.innerHTML = "";
-                data.result.forEach(servicio => {
-                    const row = `
-                        <tr align="center">
-                            <td>${servicio.nombre}</td>
-                            <td>${servicio.descripcion}</td>
-                            <td>${servicio.categoria.nombre}</td>
-                            <td>
-                                <button id="botonStatus"" class="btn btn-sm ${servicio.status ? 'btn-success' : 'btn-danger'} cambiarEstado"
-                                        data-id="${servicio.id}" 
-                                        data-status="${servicio.status}" 
-                                        data-toggle="modal" 
-                                        data-target="#modificarEstadoServicio">
-                                    ${servicio.status ? "Activo" : "Inactivo"}
-                                </button>
-                            </td>
-                            <td>
-                                <button class="btn btn-sm btn-primary btnIcono" 
-                                    data-id="${servicio.id}" 
-                                    data-nombre="${servicio.nombre}" 
-                                    data-descripcion="${servicio.descripcion}" 
-                                    data-categoria="${servicio.categoria.id}" 
-                                    data-toggle="modal" 
-                                    data-target="#modificarServicio">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                    tableBody.innerHTML += row;
-                });
-                agregarEventos(); // Agregar eventos a los botones
-            } else {
-                console.error("No se encontraron servicios.");
-            }
-        } catch (error) {
-            console.error("Error al cargar los servicios:", error);
-        }
-    }
+function filtrarTabla() {
+    const nombreFiltro = document.getElementById('filterName').value.toLowerCase();
+    const estadoFiltro = document.getElementById('filterState').value;
 
-    // Función para registrar un servicio
-    document.querySelector("#formRegistrarServicio").addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const nombre = document.querySelector("#nombre").value.trim();
-        const descripcion = document.querySelector("#descripcion").value.trim();
-        const categoriaId = categoriaSelect.value;
-
-        if (nombre && descripcion && categoriaId) {
-            const payload = {
-                nombre: nombre,
-                descripcion: descripcion,
-                categoria: { id: parseInt(categoriaId) },
-            };
-
-            try {
-                const response = await fetch(`${API_URL_SERVICIOS}/save`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload),
-                });
-
-                if (response.ok) {
-                    document.querySelector("#formRegistrarServicio").reset();
-                    $("#registrarServicio").modal("hide");
-                    mostrarServicios();
-                } else {
-                    console.error("Error al registrar el servicio.");
-                }
-            } catch (error) {
-                console.error("Error en la solicitud:", error);
-            }
+    const filas = document.getElementById('serviciosTableBody').getElementsByTagName('tr');
+    
+    Array.from(filas).forEach(fila => {
+        const nombreServicio = fila.cells[0].textContent.toLowerCase();
+        const estadoServicio = fila.cells[3].textContent.toLowerCase();
+        
+        // Comprobar si la fila debe mostrarse
+        const mostrarPorNombre = nombreServicio.includes(nombreFiltro);
+        const mostrarPorEstado = estadoFiltro === '' || estadoServicio.includes(estadoFiltro.toLowerCase());
+        
+        if (mostrarPorNombre && mostrarPorEstado) {
+            fila.style.display = '';
         } else {
-            console.error("Por favor, completa todos los campos.");
+            fila.style.display = 'none';
         }
     });
+}
 
-    // Función para modificar un servicio
-    document.querySelector("#formModificarServicio").addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const id = document.querySelector("#idMod").value;
-        const nombre = document.querySelector("#nombreMod").value.trim();
-        const descripcion = document.querySelector("#descripcionMod").value.trim();
-        const categoriaId = categoriaSelectMod.value;
-
-        if (nombre && descripcion && categoriaId) {
-            const payload = {
-                id: parseInt(id),
-                nombre: nombre,
-                descripcion: descripcion,
-                categoria: { id: parseInt(categoriaId) },
-            };
-
-            try {
-                const response = await fetch(`${API_URL_SERVICIOS}/actualizar`, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload),
-                });
-
-                if (response.ok) {
-                    $("#modificarServicio").modal("hide");
-                    mostrarServicios();
-                } else {
-                    console.error("Error al modificar el servicio.");
-                }
-            } catch (error) {
-                console.error("Error en la solicitud:", error);
-            }
-        } else {
-            console.error("Por favor, completa todos los campos.");
-        }
-    });
-
-    // Función para cambiar el estado de un servicio
-    document.querySelector("#formModificarEstado").addEventListener("submit", async (event) => {
-        event.preventDefault();
-    
-        const id = document.querySelector("#idServicio").value;
-        const status = document.querySelector("#estadoServicio").value === "Activo";
-    
-        try {
-            const payload = {
-                id: parseInt(id),
-                status: !status, // Cambiar el estado al contrario
-            };
-    
-            const response = await fetch(`${API_URL_SERVICIOS}/status`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
-    
-            if (response.ok) {
-                $("#modificarEstadoServicio").modal("hide");
-                mostrarServicios(); // Recargar la tabla
-            } else {
-                console.error("Error al actualizar el estado del servicio.");
-            }
-        } catch (error) {
-            console.error("Error en la solicitud:", error);
-        }
-    });
-    
-
-    // Función para agregar eventos a los botones
-    function agregarEventos() {
-        const btnsModificar = document.querySelectorAll(".btnIcono");
-        btnsModificar.forEach((btn) => {
-            btn.addEventListener("click", function () {
-                const id = this.getAttribute("data-id");
-                const nombre = this.getAttribute("data-nombre");
-                const descripcion = this.getAttribute("data-descripcion");
-                const categoriaId = this.getAttribute("data-categoria");
-
-                document.querySelector("#idMod").value = id;
-                document.querySelector("#nombreMod").value = nombre;
-                document.querySelector("#descripcionMod").value = descripcion;
-                categoriaSelectMod.value = categoriaId;
-            });
-        });
-
-        const btnsEstado = document.querySelectorAll(".cambiarEstado");
-btnsEstado.forEach((btn) => {
-    btn.addEventListener("click", function () {
-        const id = this.getAttribute("data-id");
-        const status = this.getAttribute("data-status") === "true";
-
-        // Rellenar los campos ocultos del modal
-        document.querySelector("#idServicio").value = id;
-        document.querySelector("#estadoServicio").value = status ? "Activo" : "Inactivo";
-    });
-});
-
-    }
-
-    // Inicializar la página
-    cargarCategorias();
-    mostrarServicios();
-});
+// Llamar a la función para obtener y mostrar los servicios cuando se cargue la página
+window.onload = function() {
+    obtenerServicios();
+};
