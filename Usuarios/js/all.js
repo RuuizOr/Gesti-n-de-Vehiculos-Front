@@ -57,7 +57,7 @@ async function obtenerUsuarios() {
 
         data.result.forEach(usuario => {
             rol = usuario.admin === "ROLE_USER" ? "Usuario" : "Administrador";
-
+            const vehiculosHTML = JSON.stringify(usuario.vehiculos);
             const row = `
                 <tr align="center">
                     <td>${usuario.nombre}</td>
@@ -93,6 +93,13 @@ async function obtenerUsuarios() {
                             Asignar Vehículo
                         </button>
                     </td>
+                     <td>
+                         <button class="btn btn-sm btn-info btnVerServicios" 
+                                    data-id="${usuario.id}" data-servicios='${vehiculosHTML}'>
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                    </td>
+
                 </tr>
             `;
             usuariosTableBody.insertAdjacentHTML('beforeend', row);
@@ -104,6 +111,67 @@ async function obtenerUsuarios() {
         mostrarAlerta('Ocurrió un error al intentar obtener los datos de los usuarios.', 'error');
     }
 }
+
+
+
+
+
+
+document.body.addEventListener('click', function (event) {
+    if (event.target.closest('.btnVerServicios')) {
+        const btn = event.target.closest('.btnVerServicios');
+        const vehiculoId = btn.getAttribute('data-id');
+        const listaServicios = btn.getAttribute('data-servicios'); // Servicios asociados en formato JSON
+        
+        // Llenar la lista de servicios en el modal
+        const ulServicios = document.getElementById('listaServicios');
+        ulServicios.innerHTML = ''; // Limpia los servicios previos
+
+        const servicios = JSON.parse(listaServicios); // Asegúrate de que estén en JSON
+
+        if (servicios.length === 0) {
+            const noServiciosMessage = document.createElement('li');
+            noServiciosMessage.textContent = 'No hay servicios aún';
+            noServiciosMessage.className = 'list-group-item text-center text-muted';
+            ulServicios.appendChild(noServiciosMessage);
+        } else {
+            servicios.forEach(servicio => {
+                const li = document.createElement('li');
+                li.textContent = `${servicio.modelo} - ${servicio.marca}-${servicio.color}`;
+                li.className = 'list-group-item';
+                ulServicios.appendChild(li);
+            });
+        }
+        
+
+        // Mostrar el modal
+        $('#modalServicios').modal('show');
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Función para cargar vehículos en el select
 async function cargarVehiculos() {

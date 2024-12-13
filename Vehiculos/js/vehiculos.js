@@ -96,6 +96,7 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
             if (!response.ok) throw new Error('Error al cargar los vehículos');
     
             const data = await response.json();
+            console.log(data)
             const tableBody = document.getElementById('vehiculosTableBody');
             tableBody.innerHTML = '';
     
@@ -127,7 +128,7 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
                         <td>
                             <button class="btn btn-sm btn-secondary btnAsignarServicio" data-id="${vehiculo.id}">
                                 <i class="fas fa-plus"></i>                        <i class="fa-solid fa-toolbox"></i>
-
+                
                             </button>
                         </td>
                         <td>
