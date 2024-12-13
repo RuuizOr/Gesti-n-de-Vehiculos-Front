@@ -315,9 +315,6 @@ modalRegistrarVehiculo.addEventListener('show.bs.modal', () => {
             console.error(error);
         }
     }
-    
-    
-    
 
     // Editar un vehículo
     document.body.addEventListener('click', function (event) {
@@ -495,4 +492,5 @@ document.getElementById('filterState').addEventListener('change', filtrarUsuario
 
     cargarVehiculos();
     cargarServicios();
+    
 });
